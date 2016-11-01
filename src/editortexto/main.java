@@ -5,13 +5,28 @@
  */
 package editortexto;
 
+import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
 /**
  *
@@ -24,10 +39,33 @@ public class main extends javax.swing.JFrame {
      */
     Connection con = null;
     Statement db = null;
-
+    User principal = null;
+    //int valid = -1;
+    File file = null;
     public main() {
         initComponents();
-
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
+            db = con.createStatement();
+            File file = new File("C:\\Users\\Inti Velasquez\\Desktop\\test.txt");
+            File file2=new File("C:\\Users\\Inti Velasquez\\Desktop\\test2.txt");
+            //long size=file.length();
+            FileReader fis=new FileReader(file);
+            BufferedReader bis=new BufferedReader(fis);
+            byte[] bytes=Files.readAllBytes(file.toPath());
+            FileWriter fr=new FileWriter(file2);
+            BufferedWriter bw=new BufferedWriter(fr);
+            for (int i = 0; i < bytes.length; i++) {
+                bw.append(bytes[i]+" \n");
+            }
+            bw.flush();
+            bw.close();
+            fr.close();
+            bis.close();
+            fis.close();
+        } catch (SQLException | IOException e) {
+            System.out.println("hola");
+        }
     }
 
     /**
@@ -48,19 +86,13 @@ public class main extends javax.swing.JFrame {
         bExitLogin = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jdRegister = new javax.swing.JDialog();
-        jLabel5 = new javax.swing.JLabel();
-        tfRUser = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        pwfRPass = new javax.swing.JPasswordField();
-        jLabel7 = new javax.swing.JLabel();
-        pwfRPass2 = new javax.swing.JPasswordField();
-        bRegisterUser = new javax.swing.JButton();
-        bExitRegister = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
         jdMain = new javax.swing.JDialog();
+        bBold = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tpText = new javax.swing.JTextPane();
         bLogin = new javax.swing.JButton();
-        bRegister = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
 
         jLabel1.setText("Usuario:");
@@ -75,6 +107,11 @@ public class main extends javax.swing.JFrame {
         });
 
         bExitLogin.setText("Salir");
+        bExitLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bExitLoginMouseClicked(evt);
+            }
+        });
 
         jLabel3.setText("Ingrese su usuario y contraseña para iniciar sesion. ");
 
@@ -133,86 +170,46 @@ public class main extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
-        jLabel5.setText("Nombre de usuario:");
-
-        jLabel6.setText("Contraseña:");
-
-        jLabel7.setText("Confirme contraseña:");
-
-        bRegisterUser.setText("Registrarse");
-        bRegisterUser.addMouseListener(new java.awt.event.MouseAdapter() {
+        bBold.setText("Bold");
+        bBold.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bRegisterUserMouseClicked(evt);
+                bBoldMouseClicked(evt);
             }
         });
 
-        bExitRegister.setText("Salir");
+        jButton2.setText("Italic");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel8.setText("Registrar nuevo usuario");
+        jButton3.setText("jButton3");
 
-        javax.swing.GroupLayout jdRegisterLayout = new javax.swing.GroupLayout(jdRegister.getContentPane());
-        jdRegister.getContentPane().setLayout(jdRegisterLayout);
-        jdRegisterLayout.setHorizontalGroup(
-            jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdRegisterLayout.createSequentialGroup()
-                .addGroup(jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jdRegisterLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tfRUser)
-                            .addComponent(pwfRPass)
-                            .addComponent(pwfRPass2, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)))
-                    .addGroup(jdRegisterLayout.createSequentialGroup()
-                        .addGap(253, 253, 253)
-                        .addComponent(bExitRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jdRegisterLayout.createSequentialGroup()
-                        .addGap(244, 244, 244)
-                        .addComponent(bRegisterUser, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jdRegisterLayout.createSequentialGroup()
-                .addGap(0, 202, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(152, 152, 152))
-        );
-        jdRegisterLayout.setVerticalGroup(
-            jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdRegisterLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel8)
-                .addGap(29, 29, 29)
-                .addGroup(jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(tfRUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(pwfRPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jdRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pwfRPass2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(bRegisterUser)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bExitRegister)
-                .addContainerGap())
-        );
+        jScrollPane1.setViewportView(tpText);
 
         javax.swing.GroupLayout jdMainLayout = new javax.swing.GroupLayout(jdMain.getContentPane());
         jdMain.getContentPane().setLayout(jdMainLayout);
         jdMainLayout.setHorizontalGroup(
             jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jdMainLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 855, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jdMainLayout.createSequentialGroup()
+                        .addComponent(bBold)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         jdMainLayout.setVerticalGroup(
             jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jdMainLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addGroup(jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bBold)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(135, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -224,14 +221,12 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        bRegister.setText("Registrarse");
-        bRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+        bExit.setText("Salir");
+        bExit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bRegisterMouseClicked(evt);
+                bExitMouseClicked(evt);
             }
         });
-
-        bExit.setText("Salir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -240,20 +235,17 @@ public class main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(163, 163, 163)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                     .addComponent(bExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(178, Short.MAX_VALUE))
+                .addContainerGap(160, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addComponent(bLogin)
-                .addGap(30, 30, 30)
-                .addComponent(bRegister)
-                .addGap(35, 35, 35)
-                .addComponent(bExit)
+                .addComponent(bLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
+                .addComponent(bExit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(126, Short.MAX_VALUE))
         );
 
@@ -274,75 +266,66 @@ public class main extends javax.swing.JFrame {
             String user = tfUser.getText();
             String password = String.valueOf(pwfPass.getPassword());
             if (!user.equals("") && !password.equals("")) {
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/holis?autoReconnect=true&useSSL=false", user, password);
-                JOptionPane.showMessageDialog(jdLogin, "Bienvenido " + user);
-                jdLogin.dispose();
-                jdRegister.pack();
-                jdRegister.setLocationRelativeTo(this);
-                jdRegister.setModal(true);
-                jdRegister.setVisible(true);
+                ResultSet usuario = db.executeQuery("select * from users where username='" + user + "' and password='" + password + "'");
+                System.out.println("hola1");
+                if (usuario.next()) {
+                    principal = new User(usuario.getString("username"), usuario.getString("password"));
+                    System.out.println("hola2");
+                    JOptionPane.showMessageDialog(jdLogin, "Bienvenido " + usuario.getString(1));
+                    jdLogin.dispose();
+                    this.setVisible(false);
+                    jdMain.pack();
+                    jdMain.setLocationRelativeTo(this);
+                    jdMain.setModal(true);
+                    jdMain.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Usuario no encontrado, revise sus credenciales");
+                    principal = null;
+
+                }
             } else {
                 JOptionPane.showMessageDialog(jdLogin, "Usuario y/o contraseña no pueden ser vacios");
                 tfUser.setText("");
                 pwfPass.setText("");
             }
         } catch (InputMismatchException | SQLException e) {
-            con = null;
-            tfUser.setText("");
-            pwfPass.setText("");
-            JOptionPane.showConfirmDialog(jdLogin, "Usuario no encontrado. Verifique sus credenciales o registre una cuenta primero");
+            e.printStackTrace();
+
+            JOptionPane.showMessageDialog(jdLogin, "Usuario no encontrado. Verifique sus credenciales o registre una cuenta primero");
         }
+        tfUser.setText("");
+        pwfPass.setText("");
     }//GEN-LAST:event_bCheckCredentialsMouseClicked
 
-    private void bRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bRegisterMouseClicked
-        tfRUser.setText("");
-        pwfRPass.setText("");
-        pwfRPass2.setText("");
-        jdRegister.pack();
-        jdRegister.setLocationRelativeTo(this);
-        jdRegister.setModal(true);
-        jdRegister.setVisible(true);
-    }//GEN-LAST:event_bRegisterMouseClicked
+    private void bExitLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bExitLoginMouseClicked
+        jdLogin.dispose();
+    }//GEN-LAST:event_bExitLoginMouseClicked
 
-    private void bRegisterUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bRegisterUserMouseClicked
-        System.out.println("Register no hace nada hasta aclarar como se debe implementar");
-        /*String rUser = tfRUser.getText();
-        String rPass = String.valueOf(pwfRPass.getPassword());
-        String rPass2 = String.valueOf(pwfRPass2.getPassword());
+    private void bExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bExitMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_bExitMouseClicked
+
+    private void bBoldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bBoldMouseClicked
+        StyleContext sc=new StyleContext();
+        //DefaultStyledDocument doc=new DefaultStyledDocument(sc);
+        //Style defaultStyle=sc.getStyle(StyleContext.DEFAULT_STYLE);
+        Document doc=tpText.getDocument();
+        Font font=new Font("Arial",Font.BOLD,18);
+        Style boldstyle=tpText.addStyle("BoldStyle", null);
+        StyleConstants.setFontFamily(boldstyle, font.getFamily());
+        StyleConstants.setBold(boldstyle, true);
+        //tpText.setCharacterAttributes(boldstyle, rootPaneCheckingEnabled);
+        String x=tpText.getSelectedText();
+        int ind=tpText.getText().indexOf(x);
+        
         try {
-
-            if (!rUser.equals("") && !rPass.equals("") && !rPass2.equals("")) {
-                if (rUser.length() < 4 || rPass.length() < 4) {
-                    JOptionPane.showMessageDialog(jdRegister, "Usuario y contraseña deben tener 4 caracter como minimo");
-                } else if (!rPass.equals(rPass2)) {
-                    JOptionPane.showMessageDialog(jdRegister, "Las contraseñas no coinciden");
-                    pwfRPass.setText("");
-                    pwfRPass2.setText("");
-                } else if (rUser.length() > 4 && rPass.length() > 4 && rPass.equals(rPass2)) {
-                    Connection tempCon=DriverManager.getConnection("jdbc:mysql://localhost:3306/holis?autoReconnect=true&useSSL=false","admin","pokemon123");
-                    Statement tempSt=tempCon.createStatement();
-                    ResultSet userExists = tempSt.executeQuery("select exists(select 1 from Users where user='"+rUser+"')");
-                    if(userExists.next()){
-                        JOptionPane.showMessageDialog(jdRegister, "El usuario ya existe");
-                        tfRUser.setText("");
-                        pwfRPass.setText("");
-                        pwfRPass2.setText("");
-                        tempSt.close();
-                        tempCon.close();
-                    }else{
-                        
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(jdRegister, "Debe llenar todos los campos");
-                tfRUser.setText("");
-                pwfRPass.setText("");
-                pwfRPass2.setText("");
-            }
-        } catch (InputMismatchException | SQLException e) {
-            JOptionPane.showMessageDialog(jdRegister, "Ocurrio un error al registrar el usuario. El usuario ya existe o se corto la coneccion a la base de datos.\n\t\tIntente de nuevo");
-        }*/
-    }//GEN-LAST:event_bRegisterUserMouseClicked
+            doc.remove(ind, x.length());
+            doc.insertString(ind, x, boldstyle);
+        } catch (BadLocationException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println();
+    }//GEN-LAST:event_bBoldMouseClicked
 
     /**
      * @param args the command line arguments
@@ -380,28 +363,22 @@ public class main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bBold;
     private javax.swing.JButton bCheckCredentials;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bExitLogin;
-    private javax.swing.JButton bExitRegister;
     private javax.swing.JButton bLogin;
-    private javax.swing.JButton bRegister;
-    private javax.swing.JButton bRegisterUser;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JDialog jdLogin;
     private javax.swing.JDialog jdMain;
-    private javax.swing.JDialog jdRegister;
     private javax.swing.JPasswordField pwfPass;
-    private javax.swing.JPasswordField pwfRPass;
-    private javax.swing.JPasswordField pwfRPass2;
-    private javax.swing.JTextField tfRUser;
     private javax.swing.JTextField tfUser;
+    private javax.swing.JTextPane tpText;
     // End of variables declaration//GEN-END:variables
 }
