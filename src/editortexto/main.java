@@ -5,28 +5,19 @@
  */
 package editortexto;
 
-import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Style;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 /**
  *
@@ -42,28 +33,16 @@ public class main extends javax.swing.JFrame {
     User principal = null;
     //int valid = -1;
     File file = null;
+   
+    int TextSize = 12;
+
     public main() {
         initComponents();
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
             db = con.createStatement();
-            File file = new File("C:\\Users\\Inti Velasquez\\Desktop\\test.txt");
-            File file2=new File("C:\\Users\\Inti Velasquez\\Desktop\\test2.txt");
-            //long size=file.length();
-            FileReader fis=new FileReader(file);
-            BufferedReader bis=new BufferedReader(fis);
-            byte[] bytes=Files.readAllBytes(file.toPath());
-            FileWriter fr=new FileWriter(file2);
-            BufferedWriter bw=new BufferedWriter(fr);
-            for (int i = 0; i < bytes.length; i++) {
-                bw.append(bytes[i]+" \n");
-            }
-            bw.flush();
-            bw.close();
-            fr.close();
-            bis.close();
-            fis.close();
-        } catch (SQLException | IOException e) {
+            
+        } catch (SQLException e) {
             System.out.println("hola");
         }
     }
@@ -87,9 +66,19 @@ public class main extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jdMain = new javax.swing.JDialog();
+        jPanel4 = new javax.swing.JPanel();
+        jtpEditorOptions = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jlTextSize = new javax.swing.JLabel();
         bBold = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        bItalic = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        bST = new javax.swing.JButton();
+        bIncreaseSize = new javax.swing.JButton();
+        bReduceSize = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        bLoadFile = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tpText = new javax.swing.JTextPane();
         bLogin = new javax.swing.JButton();
@@ -170,46 +159,177 @@ public class main extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
-        bBold.setText("Bold");
+        jdMain.setBackground(new java.awt.Color(51, 51, 255));
+
+        jPanel4.setBackground(new java.awt.Color(51, 51, 255));
+        jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 153)));
+
+        jtpEditorOptions.setBackground(new java.awt.Color(115, 10, 167));
+        jtpEditorOptions.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 0, 102), 5, true));
+
+        jPanel1.setBackground(new java.awt.Color(255, 102, 102));
+
+        jlTextSize.setText("jLabel5");
+
+        bBold.setBackground(new java.awt.Color(0, 0, 0));
+        bBold.setText("<html><b>Bold</b></html>");
         bBold.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bBoldMouseClicked(evt);
             }
         });
 
-        jButton2.setText("Italic");
+        bItalic.setBackground(new java.awt.Color(255, 102, 102));
+        bItalic.setText("<html><i>Italic</i></html>");
+        bItalic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bItalicMouseClicked(evt);
+            }
+        });
 
-        jButton3.setText("jButton3");
+        jButton3.setBackground(new java.awt.Color(255, 255, 102));
+        jButton3.setText("<html><u>Underline</u><html>");
+
+        bST.setBackground(new java.awt.Color(255, 204, 204));
+        bST.setText("<html><strike>StrikeThrough</strike></html>");
+        bST.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bSTMouseClicked(evt);
+            }
+        });
+
+        bIncreaseSize.setBackground(new java.awt.Color(51, 255, 153));
+        bIncreaseSize.setText("A ↑");
+        bIncreaseSize.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bIncreaseSizeMouseClicked(evt);
+            }
+        });
+
+        bReduceSize.setBackground(new java.awt.Color(51, 255, 204));
+        bReduceSize.setText("a ↓");
+        bReduceSize.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bReduceSizeMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
+                .addComponent(bReduceSize)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlTextSize, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(82, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bReduceSize, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlTextSize))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        jtpEditorOptions.addTab("Letra", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(102, 0, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 702, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 87, Short.MAX_VALUE)
+        );
+
+        jtpEditorOptions.addTab("Formato", jPanel2);
+
+        jPanel3.setBackground(new java.awt.Color(102, 255, 102));
+
+        bLoadFile.setText("Cargar Archivo");
+        bLoadFile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bLoadFileMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bLoadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(569, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bLoadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jtpEditorOptions.addTab("Archivos", jPanel3);
 
         jScrollPane1.setViewportView(tpText);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 855, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(46, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(53, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jdMainLayout = new javax.swing.GroupLayout(jdMain.getContentPane());
         jdMain.getContentPane().setLayout(jdMainLayout);
         jdMainLayout.setHorizontalGroup(
             jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdMainLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 855, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jdMainLayout.createSequentialGroup()
-                        .addComponent(bBold)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
-                .addContainerGap(39, Short.MAX_VALUE))
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jdMainLayout.setVerticalGroup(
             jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdMainLayout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bBold)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(135, Short.MAX_VALUE))
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -267,14 +387,16 @@ public class main extends javax.swing.JFrame {
             String password = String.valueOf(pwfPass.getPassword());
             if (!user.equals("") && !password.equals("")) {
                 ResultSet usuario = db.executeQuery("select * from users where username='" + user + "' and password='" + password + "'");
-                System.out.println("hola1");
                 if (usuario.next()) {
                     principal = new User(usuario.getString("username"), usuario.getString("password"));
-                    System.out.println("hola2");
-                    JOptionPane.showMessageDialog(jdLogin, "Bienvenido " + usuario.getString(1));
+                    //JOptionPane.showMessageDialog(jdLogin, "Bienvenido " + usuario.getString(1));
+                    String ser=principal.Serialize();
+                    System.out.println(ser);
+                    
+                    System.out.println(principal.Deserialize(ser).toString());
                     jdLogin.dispose();
                     this.setVisible(false);
-                    jdMain.pack();
+                    jdMain.pack();//!Cambiar a un boton para que el usuario ingrese al editor cuando desee
                     jdMain.setLocationRelativeTo(this);
                     jdMain.setModal(true);
                     jdMain.setVisible(true);
@@ -306,26 +428,90 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_bExitMouseClicked
 
     private void bBoldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bBoldMouseClicked
-        StyleContext sc=new StyleContext();
-        //DefaultStyledDocument doc=new DefaultStyledDocument(sc);
-        //Style defaultStyle=sc.getStyle(StyleContext.DEFAULT_STYLE);
-        Document doc=tpText.getDocument();
-        Font font=new Font("Arial",Font.BOLD,18);
-        Style boldstyle=tpText.addStyle("BoldStyle", null);
-        StyleConstants.setFontFamily(boldstyle, font.getFamily());
-        StyleConstants.setBold(boldstyle, true);
-        //tpText.setCharacterAttributes(boldstyle, rootPaneCheckingEnabled);
-        String x=tpText.getSelectedText();
-        int ind=tpText.getText().indexOf(x);
-        
-        try {
-            doc.remove(ind, x.length());
-            doc.insertString(ind, x, boldstyle);
-        } catch (BadLocationException ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println();
+        int start = tpText.getSelectionStart();
+        int end = tpText.getSelectedText().length();
+        //String line = tpText.getSelectedText();
+        StyledDocument document = (StyledDocument) tpText.getDocument();
+        //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
+        AttributeSet as = document.getCharacterElement(start).getAttributes();
+        MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setBold(mas, !StyleConstants.isBold(as));//toggle bold/negrita
+        document.setCharacterAttributes(start, end, mas, true);//setear estilo
     }//GEN-LAST:event_bBoldMouseClicked
+
+    private void bItalicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bItalicMouseClicked
+        int start = tpText.getSelectionStart();
+        int end = tpText.getSelectedText().length();
+        //String line = tpText.getSelectedText();
+        StyledDocument document = (StyledDocument) tpText.getDocument();
+        //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
+        AttributeSet as = document.getCharacterElement(start).getAttributes();
+        MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setItalic(mas, !StyleConstants.isItalic(as));//toggle letra italica
+        document.setCharacterAttributes(start, end, mas, true);//setear estilo
+    }//GEN-LAST:event_bItalicMouseClicked
+
+    private void bSTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bSTMouseClicked
+
+        int start = tpText.getSelectionStart();
+        int end = tpText.getSelectedText().length();
+        //String line = tpText.getSelectedText();
+        StyledDocument document = (StyledDocument) tpText.getDocument();
+        //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
+        AttributeSet as = document.getCharacterElement(start).getAttributes();
+        MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setStrikeThrough(mas, !StyleConstants.isStrikeThrough(as));//toggle linea cruzada     
+        document.setCharacterAttributes(start, end, mas, true);//setear estilo
+    }//GEN-LAST:event_bSTMouseClicked
+
+    private void bIncreaseSizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bIncreaseSizeMouseClicked
+        if (TextSize < 24) {
+            TextSize += 2;
+            MutableAttributeSet mas = tpText.getInputAttributes();
+            StyleConstants.setFontSize(mas, TextSize);
+            jlTextSize.setText(TextSize + "");
+            //tpText.setFont(new Font("Arial",Font.PLAIN,TextSize));
+        }
+    }//GEN-LAST:event_bIncreaseSizeMouseClicked
+
+    private void bReduceSizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bReduceSizeMouseClicked
+        if (TextSize > 6) {
+            //if (tpText.getSelectionStart() == -1) {
+                TextSize -= 2;
+                MutableAttributeSet mas = tpText.getInputAttributes();
+                StyleConstants.setFontSize(mas, TextSize);
+                jlTextSize.setText(TextSize + "");
+            /*}else{
+                int start=tpText.getSelectionStart();
+                String line=tpText.getSelectedText();
+                int end=line.length();
+                /*StyledDocument document=(StyledDocument) tpText.getDocument();
+                Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
+                AttributeSet as=document.getCharacterElement(start).getAttributes();
+                MutableAttributeSet mas=new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setFontSize(mas, TextSize-2);
+                
+                MutableAttributeSet mas=tpText.getInputAttributes();
+//                StyleConstants.setFontSize(mas, tpText.getSelectedText());
+                StyledDocument document=tpText.getStyledDocument();
+                document.setCharacterAttributes(start, end, mas, false);*/
+                /*try {
+                    document.remove(start, end);
+                    document.insertString(start, line, mas);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
+                
+                //StyleConstants.setFontSize(mas, TextSize);
+                //document.setLogicalStyle(end,logicalStyle);
+            //}
+            //tpText.setFont(new Font(tpText.getFont().getFontName(),tpText.getFont().getStyle(),TextSize));
+        }
+    }//GEN-LAST:event_bReduceSizeMouseClicked
+
+    private void bLoadFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bLoadFileMouseClicked
+        
+    }//GEN-LAST:event_bLoadFileMouseClicked
 
     /**
      * @param args the command line arguments
@@ -367,16 +553,26 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton bCheckCredentials;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bExitLogin;
+    private javax.swing.JButton bIncreaseSize;
+    private javax.swing.JButton bItalic;
+    private javax.swing.JButton bLoadFile;
     private javax.swing.JButton bLogin;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton bReduceSize;
+    private javax.swing.JButton bST;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JDialog jdLogin;
     private javax.swing.JDialog jdMain;
+    private javax.swing.JLabel jlTextSize;
+    private javax.swing.JTabbedPane jtpEditorOptions;
     private javax.swing.JPasswordField pwfPass;
     private javax.swing.JTextField tfUser;
     private javax.swing.JTextPane tpText;
