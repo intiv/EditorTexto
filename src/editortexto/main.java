@@ -5,6 +5,7 @@
  */
 package editortexto;
 
+import java.awt.Image;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;
@@ -33,7 +35,7 @@ public class main extends javax.swing.JFrame {
     User principal = null;
     //int valid = -1;
     File file = null;
-   
+
     int TextSize = 12;
 
     public main() {
@@ -41,10 +43,15 @@ public class main extends javax.swing.JFrame {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
             db = con.createStatement();
-            
         } catch (SQLException e) {
             System.out.println("hola");
         }
+        FileClass test=new FileClass(1,"Hola.txt","Desktop",null);
+        String xml=test.Serialize();
+        FileClass temp=test.Deserialize(xml);
+        System.out.println("xml = "+xml);
+        System.out.println("Deserialized = "+temp.toString());
+        jlTextSize.setText(TextSize+"");
     }
 
     /**
@@ -70,15 +77,18 @@ public class main extends javax.swing.JFrame {
         jtpEditorOptions = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jlTextSize = new javax.swing.JLabel();
-        bBold = new javax.swing.JButton();
-        bItalic = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        bUnderline = new javax.swing.JButton();
         bST = new javax.swing.JButton();
         bIncreaseSize = new javax.swing.JButton();
         bReduceSize = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        bItalic = new javax.swing.JButton();
+        bBold = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         bLoadFile = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        bAlignLeft = new javax.swing.JButton();
+        bAlignRight = new javax.swing.JButton();
+        bAlignCenter = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tpText = new javax.swing.JTextPane();
         bLogin = new javax.swing.JButton();
@@ -161,44 +171,32 @@ public class main extends javax.swing.JFrame {
 
         jdMain.setBackground(new java.awt.Color(51, 51, 255));
 
-        jPanel4.setBackground(new java.awt.Color(51, 51, 255));
+        jPanel4.setBackground(new java.awt.Color(0, 0, 0));
         jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 153)));
 
-        jtpEditorOptions.setBackground(new java.awt.Color(115, 10, 167));
-        jtpEditorOptions.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 0, 102), 5, true));
+        jtpEditorOptions.setBackground(new java.awt.Color(102, 102, 102));
+        jtpEditorOptions.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 153), 5, true));
 
-        jPanel1.setBackground(new java.awt.Color(255, 102, 102));
+        jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
         jlTextSize.setText("jLabel5");
 
-        bBold.setBackground(new java.awt.Color(0, 0, 0));
-        bBold.setText("<html><b>Bold</b></html>");
-        bBold.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bBoldMouseClicked(evt);
-            }
-        });
+        bUnderline.setBackground(new java.awt.Color(0, 0, 0));
+        bUnderline.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        bUnderline.setMaximumSize(new java.awt.Dimension(60, 50));
+        bUnderline.setMinimumSize(new java.awt.Dimension(60, 50));
+        bUnderline.setPreferredSize(new java.awt.Dimension(60, 50));
 
-        bItalic.setBackground(new java.awt.Color(255, 102, 102));
-        bItalic.setText("<html><i>Italic</i></html>");
-        bItalic.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bItalicMouseClicked(evt);
-            }
-        });
-
-        jButton3.setBackground(new java.awt.Color(255, 255, 102));
-        jButton3.setText("<html><u>Underline</u><html>");
-
-        bST.setBackground(new java.awt.Color(255, 204, 204));
-        bST.setText("<html><strike>StrikeThrough</strike></html>");
+        bST.setBackground(new java.awt.Color(0, 0, 0));
+        bST.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         bST.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bSTMouseClicked(evt);
             }
         });
 
-        bIncreaseSize.setBackground(new java.awt.Color(51, 255, 153));
+        bIncreaseSize.setBackground(new java.awt.Color(0, 0, 0));
+        bIncreaseSize.setForeground(new java.awt.Color(0, 0, 204));
         bIncreaseSize.setText("A ↑");
         bIncreaseSize.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -206,11 +204,39 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        bReduceSize.setBackground(new java.awt.Color(51, 255, 204));
+        bReduceSize.setBackground(new java.awt.Color(0, 0, 0));
+        bReduceSize.setForeground(new java.awt.Color(0, 0, 204));
         bReduceSize.setText("a ↓");
         bReduceSize.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bReduceSizeMouseClicked(evt);
+            }
+        });
+
+        bItalic.setBackground(new java.awt.Color(0, 0, 0));
+        bItalic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        bItalic.setMaximumSize(new java.awt.Dimension(60, 50));
+        bItalic.setMinimumSize(new java.awt.Dimension(60, 50));
+        bItalic.setPreferredSize(new java.awt.Dimension(60, 50));
+        bItalic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bItalicMouseClicked(evt);
+            }
+        });
+
+        bBold.setBackground(new java.awt.Color(0, 0, 0));
+        bBold.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        bBold.setMaximumSize(new java.awt.Dimension(60, 50));
+        bBold.setMinimumSize(new java.awt.Dimension(60, 50));
+        bBold.setPreferredSize(new java.awt.Dimension(60, 50));
+        bBold.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bBoldMouseClicked(evt);
+            }
+        });
+        bBold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBoldActionPerformed(evt);
             }
         });
 
@@ -219,55 +245,41 @@ public class main extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(32, 32, 32)
                 .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(49, 49, 49)
                 .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
+                .addGap(43, 43, 43)
+                .addComponent(bUnderline, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addComponent(bReduceSize)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jlTextSize, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addGap(57, 57, 57))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bReduceSize, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlTextSize))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bUnderline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bReduceSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jlTextSize)))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         jtpEditorOptions.addTab("Letra", jPanel1);
 
-        jPanel2.setBackground(new java.awt.Color(102, 0, 255));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 702, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 87, Short.MAX_VALUE)
-        );
-
-        jtpEditorOptions.addTab("Formato", jPanel2);
-
-        jPanel3.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
 
         bLoadFile.setText("Cargar Archivo");
         bLoadFile.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -283,18 +295,62 @@ public class main extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(bLoadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(569, Short.MAX_VALUE))
+                .addContainerGap(648, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(bLoadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+                .addComponent(bLoadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jtpEditorOptions.addTab("Archivos", jPanel3);
 
+        jPanel2.setBackground(new java.awt.Color(102, 102, 102));
+
+        bAlignLeft.setBackground(new java.awt.Color(0, 0, 0));
+        bAlignLeft.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        bAlignLeft.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bAlignLeftMouseClicked(evt);
+            }
+        });
+
+        bAlignRight.setBackground(new java.awt.Color(0, 0, 0));
+        bAlignRight.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        bAlignCenter.setBackground(new java.awt.Color(0, 0, 0));
+        bAlignCenter.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(bAlignLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(bAlignRight, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(bAlignCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(537, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bAlignCenter, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(bAlignRight, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                        .addComponent(bAlignLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(47, Short.MAX_VALUE))
+        );
+
+        jtpEditorOptions.addTab("Formato", jPanel2);
+
+        tpText.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 102), 5));
         jScrollPane1.setViewportView(tpText);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -302,34 +358,31 @@ public class main extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 855, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                    .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 796, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jdMainLayout = new javax.swing.GroupLayout(jdMain.getContentPane());
         jdMain.getContentPane().setLayout(jdMainLayout);
         jdMainLayout.setHorizontalGroup(
             jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jdMainLayout.setVerticalGroup(
             jdMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -390,12 +443,27 @@ public class main extends javax.swing.JFrame {
                 if (usuario.next()) {
                     principal = new User(usuario.getString("username"), usuario.getString("password"));
                     //JOptionPane.showMessageDialog(jdLogin, "Bienvenido " + usuario.getString(1));
-                    String ser=principal.Serialize();
+                    String ser = principal.Serialize();
                     System.out.println(ser);
-                    
+
                     System.out.println(principal.Deserialize(ser).toString());
                     jdLogin.dispose();
                     this.setVisible(false);
+                    bBold.setSize(60, 50);
+                    bBold.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/bold.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    bItalic.setSize(60, 50);
+                    bItalic.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/italic.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    bUnderline.setSize(60,50);
+                    bUnderline.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/underline.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    bST.setSize(60, 50);
+                    bST.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/strikethrough.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    bAlignLeft.setSize(60,50);
+                    bAlignLeft.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/left-align.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    bAlignRight.setSize(60, 50);
+                    bAlignRight.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/right-align.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    bAlignCenter.setSize(60,50);
+                    bAlignCenter.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/center-align.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    
                     jdMain.pack();//!Cambiar a un boton para que el usuario ingrese al editor cuando desee
                     jdMain.setLocationRelativeTo(this);
                     jdMain.setModal(true);
@@ -428,40 +496,45 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_bExitMouseClicked
 
     private void bBoldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bBoldMouseClicked
-        int start = tpText.getSelectionStart();
-        int end = tpText.getSelectedText().length();
-        //String line = tpText.getSelectedText();
-        StyledDocument document = (StyledDocument) tpText.getDocument();
-        //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
-        AttributeSet as = document.getCharacterElement(start).getAttributes();
-        MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setBold(mas, !StyleConstants.isBold(as));//toggle bold/negrita
-        document.setCharacterAttributes(start, end, mas, true);//setear estilo
+        if (tpText.getSelectedText() != null) {
+            int start = tpText.getSelectionStart();
+            int end = tpText.getSelectedText().length();
+            //String line = tpText.getSelectedText();
+            StyledDocument document = (StyledDocument) tpText.getDocument();
+            //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
+            AttributeSet as = document.getCharacterElement(start).getAttributes();
+            MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
+            StyleConstants.setBold(mas, !StyleConstants.isBold(as));//toggle bold/negrita
+            document.setCharacterAttributes(start, end, mas, true);//setear estilo
+        }
     }//GEN-LAST:event_bBoldMouseClicked
 
     private void bItalicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bItalicMouseClicked
-        int start = tpText.getSelectionStart();
-        int end = tpText.getSelectedText().length();
-        //String line = tpText.getSelectedText();
-        StyledDocument document = (StyledDocument) tpText.getDocument();
-        //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
-        AttributeSet as = document.getCharacterElement(start).getAttributes();
-        MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setItalic(mas, !StyleConstants.isItalic(as));//toggle letra italica
-        document.setCharacterAttributes(start, end, mas, true);//setear estilo
+        if (tpText.getSelectedText() != null) {
+            int start = tpText.getSelectionStart();
+            int end = tpText.getSelectedText().length();
+            //String line = tpText.getSelectedText();
+            StyledDocument document = (StyledDocument) tpText.getDocument();
+            //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
+            AttributeSet as = document.getCharacterElement(start).getAttributes();
+            MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
+            StyleConstants.setItalic(mas, !StyleConstants.isItalic(as));//toggle letra italica
+            document.setCharacterAttributes(start, end, mas, true);//setear estilo
+        }
     }//GEN-LAST:event_bItalicMouseClicked
 
     private void bSTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bSTMouseClicked
-
-        int start = tpText.getSelectionStart();
-        int end = tpText.getSelectedText().length();
-        //String line = tpText.getSelectedText();
-        StyledDocument document = (StyledDocument) tpText.getDocument();
-        //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
-        AttributeSet as = document.getCharacterElement(start).getAttributes();
-        MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setStrikeThrough(mas, !StyleConstants.isStrikeThrough(as));//toggle linea cruzada     
-        document.setCharacterAttributes(start, end, mas, true);//setear estilo
+        if (tpText.getSelectedText() != null) {
+            int start = tpText.getSelectionStart();
+            int end = tpText.getSelectedText().length();
+            //String line = tpText.getSelectedText();
+            StyledDocument document = (StyledDocument) tpText.getDocument();
+            //Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
+            AttributeSet as = document.getCharacterElement(start).getAttributes();
+            MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
+            StyleConstants.setStrikeThrough(mas, !StyleConstants.isStrikeThrough(as));//toggle linea cruzada     
+            document.setCharacterAttributes(start, end, mas, true);//setear estilo
+        }
     }//GEN-LAST:event_bSTMouseClicked
 
     private void bIncreaseSizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bIncreaseSizeMouseClicked
@@ -470,48 +543,38 @@ public class main extends javax.swing.JFrame {
             MutableAttributeSet mas = tpText.getInputAttributes();
             StyleConstants.setFontSize(mas, TextSize);
             jlTextSize.setText(TextSize + "");
-            //tpText.setFont(new Font("Arial",Font.PLAIN,TextSize));
         }
     }//GEN-LAST:event_bIncreaseSizeMouseClicked
 
     private void bReduceSizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bReduceSizeMouseClicked
         if (TextSize > 6) {
-            //if (tpText.getSelectionStart() == -1) {
-                TextSize -= 2;
-                MutableAttributeSet mas = tpText.getInputAttributes();
-                StyleConstants.setFontSize(mas, TextSize);
-                jlTextSize.setText(TextSize + "");
-            /*}else{
-                int start=tpText.getSelectionStart();
-                String line=tpText.getSelectedText();
-                int end=line.length();
-                /*StyledDocument document=(StyledDocument) tpText.getDocument();
-                Style logicalStyle = document.getLogicalStyle(tpText.getSelectionStart());
-                AttributeSet as=document.getCharacterElement(start).getAttributes();
-                MutableAttributeSet mas=new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setFontSize(mas, TextSize-2);
-                
-                MutableAttributeSet mas=tpText.getInputAttributes();
-//                StyleConstants.setFontSize(mas, tpText.getSelectedText());
-                StyledDocument document=tpText.getStyledDocument();
-                document.setCharacterAttributes(start, end, mas, false);*/
-                /*try {
-                    document.remove(start, end);
-                    document.insertString(start, line, mas);
-                } catch (BadLocationException ex) {
-                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
-                
-                //StyleConstants.setFontSize(mas, TextSize);
-                //document.setLogicalStyle(end,logicalStyle);
-            //}
-            //tpText.setFont(new Font(tpText.getFont().getFontName(),tpText.getFont().getStyle(),TextSize));
+            TextSize -= 2;
+            MutableAttributeSet mas = tpText.getInputAttributes();
+            StyleConstants.setFontSize(mas, TextSize);
+            jlTextSize.setText(TextSize + "");
+            
         }
     }//GEN-LAST:event_bReduceSizeMouseClicked
 
     private void bLoadFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bLoadFileMouseClicked
-        
+
     }//GEN-LAST:event_bLoadFileMouseClicked
+
+    private void bBoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBoldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bBoldActionPerformed
+
+    private void bAlignLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bAlignLeftMouseClicked
+        if(tpText.getSelectedText()!=null){
+            int start=tpText.getSelectionStart();
+            int end=tpText.getSelectionEnd();
+            StyledDocument sd=tpText.getStyledDocument();
+            MutableAttributeSet SAS =tpText.getInputAttributes();
+            StyleConstants.setAlignment(SAS, StyleConstants.ALIGN_RIGHT);
+            sd.setParagraphAttributes(0,end,SAS, true);
+        
+        }
+    }//GEN-LAST:event_bAlignLeftMouseClicked
 
     /**
      * @param args the command line arguments
@@ -549,6 +612,9 @@ public class main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAlignCenter;
+    private javax.swing.JButton bAlignLeft;
+    private javax.swing.JButton bAlignRight;
     private javax.swing.JButton bBold;
     private javax.swing.JButton bCheckCredentials;
     private javax.swing.JButton bExit;
@@ -559,7 +625,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton bLogin;
     private javax.swing.JButton bReduceSize;
     private javax.swing.JButton bST;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton bUnderline;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

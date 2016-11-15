@@ -26,6 +26,10 @@ public class FileClass {
     private byte[][] sections;
 
     public FileClass() {
+        ID=-1;
+        name="";
+        dir="";
+        sections=null;
     }
 
     public FileClass(int ID, String name, String dir, byte[][] sections) {
