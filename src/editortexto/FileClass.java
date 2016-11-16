@@ -87,7 +87,6 @@ public class FileClass {
             Marshaller m=context.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             m.marshal(this, sw);
-            System.out.println(sw.toString());
             return sw.toString();
         }catch(JAXBException CantSerialize){
             return "Error";

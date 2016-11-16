@@ -273,6 +273,9 @@
                           <Dimension value="[60, 50]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bUnderlineMouseClicked"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="bST">
                       <Properties>
@@ -387,8 +390,12 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bLoadFile" min="-2" pref="121" max="-2" attributes="0"/>
-                              <EmptySpace pref="648" max="32767" attributes="0"/>
+                              <Component id="bLoadFile" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jButton1" min="-2" pref="138" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="bXMLFile" min="-2" pref="111" max="-2" attributes="0"/>
+                              <EmptySpace pref="365" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -396,8 +403,14 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bLoadFile" pref="94" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="bXMLFile" pref="66" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jButton1" pref="66" max="32767" attributes="0"/>
+                                      <Component id="bLoadFile" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace pref="41" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -405,10 +418,23 @@
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="bLoadFile">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Cargar Archivo"/>
+                        <Property name="text" type="java.lang.String" value="Agregar Archivo"/>
                       </Properties>
                       <Events>
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bLoadFileMouseClicked"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="jButton1">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Asignar permisos"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="bXMLFile">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="XML"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bXMLFileMouseClicked"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -447,10 +473,8 @@
                               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="bAlignCenter" pref="46" max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="bAlignRight" pref="46" max="32767" attributes="0"/>
-                                      <Component id="bAlignLeft" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="bAlignRight" pref="46" max="32767" attributes="0"/>
+                                  <Component id="bAlignLeft" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="47" max="32767" attributes="0"/>
                           </Group>
@@ -484,6 +508,9 @@
                           </Border>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bAlignRightMouseClicked"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="bAlignCenter">
                       <Properties>
@@ -496,6 +523,9 @@
                           </Border>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bAlignCenterMouseClicked"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
