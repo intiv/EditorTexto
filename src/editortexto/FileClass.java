@@ -7,6 +7,7 @@ package editortexto;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Arrays;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -22,31 +23,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FileClass {
     private int ID;
     private String name;
-    private String dir;
-    private byte[][] sections;
+    //private byte[][] sections;
+    private String text;
+    
 
     public FileClass() {
         ID=-1;
         name="";
-        dir="";
-        sections=null;
+        text="";
+        //sections=null;
     }
 
-    public FileClass(int ID, String name, String dir, byte[][] sections) {
+    public FileClass(int ID, String name, byte[][] bytes) {
         this.ID = ID;
         this.name = name;
-        this.dir = dir;
-        this.sections = sections;
+        
+        //this.sections = sections;
     }
 
-    @XmlElement
-    public byte[][] getSections() {
-        return sections;
+    public FileClass(int ID, String name, byte[][] bytes,String text) {
+        this.ID = ID;
+        this.name = name;
+        //this.sections = sections;
+        this.text=text;
     }
+    
+    
+ //   public byte[][] getSections() {
+  //      return sections;
+  //  }
 
-    public void setSections(byte[][] sections) {
-        this.sections = sections;
-    }
+   // public void setSections(byte[][] sections) {
+   //     this.sections = sections;
+   // }
 
     @XmlElement
     public int getID() {
@@ -66,18 +75,10 @@ public class FileClass {
         this.name = name;
     }
 
-    @XmlElement
-    public String getDir() {
-        return dir;
-    }
-
-    public void setDir(String dir) {
-        this.dir = dir;
-    }
 
     @Override
     public String toString() {
-        return "FileClass{" + "ID=" + ID + ", name=" + name + ", dir=" + dir + ", sections=" + sections + '}';
+        return "FileClass{" + "ID=" + ID + ", name=" + name + ", sections="/* + Arrays.deepToString(sections) */+ '}';
     }
     
     public String Serialize(){
@@ -102,5 +103,14 @@ public class FileClass {
             System.out.println("Error deserializando");
             return null;
         }
+    }
+
+    @XmlElement
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

@@ -16,22 +16,27 @@ public class User {
 
     private String username;
     private String pass;
-
-    public User(String username, String pass) {
+    private final int id;
+    
+    public User(String username, String pass, int id) {
         this.username = username;
         this.pass = pass;
+        this.id=id;
     }
 
     public User() {
         this.username = "";
         this.pass = "";
+        this.id=-1;
     }
 
     public User(User cpy) {
         this.username = cpy.getUsername();
         this.pass = cpy.getPass();
+        this.id=cpy.getId();
     }
 
+    
     @XmlElement
     public String getPass() {
         return pass;
@@ -80,5 +85,11 @@ public class User {
             return null;
         }
     }
+
+    @XmlElement
+    public int getId() {
+        return id;
+    }
+    
 
 }
