@@ -7,7 +7,6 @@ package editortexto;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Arrays;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;

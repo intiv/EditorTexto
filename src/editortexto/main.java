@@ -4,8 +4,14 @@ import com.sun.glass.events.KeyEvent;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,7 +38,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 
 /*
 ********************************************************************************************* 
@@ -57,18 +62,41 @@ public class main extends javax.swing.JFrame {
     Statement db = null;
     User principal = null;
     FileClass curr = null;
-
+    File CurrentFile = null;
+    DefaultTreeModel original = null;
     int TextSize = 12;
 
     public main() {
         initComponents();
         tpText.setText("");
+        this.setLocationRelativeTo(null);
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
             db = con.createStatement();
         } catch (SQLException e) {
             System.out.println("hola");
         }
+        /*
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        !!!!!!!!!!!!!!!!!!ESTO FUNCIONA NO BORRAR ESTO FUNCIONA NO BORRAR!!!!!!!!!!!!!!!!!!!!
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        try {
+
+           
+            URL url = new URL("ftp://UsuarioOA%40webbpa.com:Seccion25@ftp.webbpa.com/Test.txt");
+            URLConnection conn = url.openConnection();
+            OutputStream os = conn.getOutputStream();
+            FileInputStream is = new FileInputStream("C:\\Users\\Inti Velasquez\\Desktop\\Test.txt");
+            byte[] buffer = new byte[30];
+            int BytesRead = -1;
+            while ((BytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, BytesRead);
+            }
+            is.close();
+            os.close();
+            System.out.println("ya");
+        } catch (IOException ex) {
+        }*/
         jlTextSize.setText(TextSize + "");
     }
 
@@ -109,8 +137,10 @@ public class main extends javax.swing.JFrame {
         jlLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtAdmin = new javax.swing.JTree();
-        jButton4 = new javax.swing.JButton();
-        jpmAdmin = new javax.swing.JPopupMenu();
+        bClose = new javax.swing.JButton();
+        bLogout = new javax.swing.JButton();
+        jpmAdminFiles = new javax.swing.JPopupMenu();
+        jmiAbrir = new javax.swing.JMenuItem();
         jmiPermiso = new javax.swing.JMenuItem();
         jmiDelete = new javax.swing.JMenuItem();
         jdPermisos = new javax.swing.JDialog();
@@ -121,7 +151,6 @@ public class main extends javax.swing.JFrame {
         cbListUsers = new javax.swing.JComboBox<>();
         jButton3 = new javax.swing.JButton();
         bReadOnly = new javax.swing.JButton();
-        bWriteOnly = new javax.swing.JButton();
         bReadWrite = new javax.swing.JButton();
         bLogin = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
@@ -426,6 +455,12 @@ public class main extends javax.swing.JFrame {
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Tus Archivos");
         treeNode1.add(treeNode2);
         treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Archivos Compartidos");
+        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Solo Lectura");
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Solo Escritura");
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Lectura y Escritura");
+        treeNode2.add(treeNode3);
         treeNode1.add(treeNode2);
         jtAdmin.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jtAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -435,10 +470,17 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jtAdmin);
 
-        jButton4.setText("Exit");
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        bClose.setText("Exit");
+        bClose.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                bCloseMouseClicked(evt);
+            }
+        });
+
+        bLogout.setText("Log out");
+        bLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bLogoutMouseClicked(evt);
             }
         });
 
@@ -461,8 +503,10 @@ public class main extends javax.swing.JFrame {
                         .addContainerGap(24, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 796, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bClose, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(123, 123, 123))))
         );
         jPanel4Layout.setVerticalGroup(
@@ -477,7 +521,9 @@ public class main extends javax.swing.JFrame {
                         .addComponent(jlLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(63, 63, 63)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bClose, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -496,16 +542,24 @@ public class main extends javax.swing.JFrame {
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jmiAbrir.setText("jMenuItem1");
+        jmiAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiAbrirActionPerformed(evt);
+            }
+        });
+        jpmAdminFiles.add(jmiAbrir);
+
         jmiPermiso.setText("Compartir");
         jmiPermiso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiPermisoActionPerformed(evt);
             }
         });
-        jpmAdmin.add(jmiPermiso);
+        jpmAdminFiles.add(jmiPermiso);
 
         jmiDelete.setText("Borrar");
-        jpmAdmin.add(jmiDelete);
+        jpmAdminFiles.add(jmiDelete);
 
         jLabel5.setText("Usuario: ");
 
@@ -526,13 +580,6 @@ public class main extends javax.swing.JFrame {
         bReadOnly.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bReadOnlyMouseClicked(evt);
-            }
-        });
-
-        bWriteOnly.setText("Escritura");
-        bWriteOnly.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bWriteOnlyMouseClicked(evt);
             }
         });
 
@@ -561,9 +608,7 @@ public class main extends javax.swing.JFrame {
                 .addGap(136, 136, 136)
                 .addComponent(bReadOnly, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
-                .addGroup(jdPermisosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                    .addComponent(bWriteOnly, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(bReadWrite)
                 .addContainerGap(65, Short.MAX_VALUE))
@@ -587,7 +632,6 @@ public class main extends javax.swing.JFrame {
                     .addComponent(cbListUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(jdPermisosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bWriteOnly)
                     .addComponent(bReadWrite)
                     .addComponent(bReadOnly))
                 .addGap(18, 18, 18)
@@ -649,7 +693,23 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_bCheckCredentialsMouseClicked
 
     private void bExitLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bExitLoginMouseClicked
+
         jdLogin.dispose();
+        if (!this.isVisible()) {
+            try {
+                if (!db.isClosed()) {
+                    db.close();
+                }
+                if (!con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.exit(1);
+            } finally {
+                System.exit(0);
+            }
+        }
+
     }//GEN-LAST:event_bExitLoginMouseClicked
 
     private void bExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bExitMouseClicked
@@ -677,22 +737,6 @@ public class main extends javax.swing.JFrame {
             MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
             StyleConstants.setBold(mas, !StyleConstants.isBold(as));//toggle bold/negrita
             document.setCharacterAttributes(start, end, mas, true);//setear estilo   
-            try {
-                db = con.createStatement();
-                ResultSet rs = db.executeQuery("select FileID from permissions where UserID=" + principal.getId());
-                if (rs.next()) {
-                    rs = db.executeQuery("select * from files where OwnerID=2");
-                    if (rs.next()) {
-                        FileClass test = new FileClass(rs.getInt("ID"), rs.getString("name"), null);
-                    } else {
-                        System.err.println("Segundo nope");
-                    }
-                } else {
-                    System.err.println("Primero nope");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }//GEN-LAST:event_bBoldMouseClicked
 
@@ -747,21 +791,36 @@ public class main extends javax.swing.JFrame {
             chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int op = chooser.showOpenDialog(jdMain);
             if (op == JFileChooser.APPROVE_OPTION) {
-                File open = chooser.getSelectedFile();
+                CurrentFile = chooser.getSelectedFile();
 
-                try (FileReader fr = new FileReader(open)) {
-                    BufferedReader br = new BufferedReader(fr);
+                try (FileReader fr = new FileReader(CurrentFile); BufferedReader br = new BufferedReader(fr)) {
+                    String Text = "";
                     tpText.setText("");
                     Document doc = tpText.getDocument();
-                    String line = "";
+                    String line;
                     while ((line = br.readLine()) != null) {
                         doc.insertString(doc.getLength(), line, null);
+                        Text += line + "\n";
+                    }
+                    int id = -1;
+                    try {
+                        if (db.isClosed()) {
+                            db = con.createStatement();
+                        }
+                        ResultSet HighestID = db.executeQuery("select ID from files order by ID desc limit 1");
+                        if (HighestID.next()) {
+                            id = HighestID.getInt(1);
+                        }
+                    } catch (SQLException ErrorRetrieving) {
 
                     }
-                    curr=new FileClass();
-                    curr.setName(open.getName());
-                    
-                    br.close();
+                    curr = new FileClass();
+                    curr.setName(CurrentFile.getName());
+                    if (id != -1) {
+                        id += 1;
+                    }
+                    curr.setID(id);
+                    curr.setText(Text);
                 }
             }
         } catch (NullPointerException | IOException | BadLocationException e) {
@@ -861,10 +920,14 @@ public class main extends javax.swing.JFrame {
 
             jtAdmin.setSelectionRow(jtAdmin.getClosestRowForLocation(evt.getX(), evt.getY()));
             if (jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Tus Archivos")) {
-                jpmAdmin.show(jtAdmin, evt.getX(), evt.getY());
+                jmiPermiso.setEnabled(true);
+                jmiDelete.setEnabled(true);
+                jpmAdminFiles.show(jtAdmin, evt.getX(), evt.getY());
 
-            } else if(jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Archivos Compartidos")){
-                System.out.println(jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString());
+            } else if (jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equalsIgnoreCase("Solo Lectura") || jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equalsIgnoreCase("Lectura y Escritura")) {
+                jmiPermiso.setEnabled(false);
+                jmiDelete.setEnabled(false);
+                jpmAdminFiles.show(jtAdmin, evt.getX(), evt.getY());
             }
 
         }
@@ -884,7 +947,8 @@ public class main extends javax.swing.JFrame {
                 model.addElement(rs.getString("user"));
             }
             cbListUsers.setModel(model);
-            tfPermisosFileName.setText(curr.getName());
+
+            tfPermisosFileName.setText(((FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject()).getName());
             jdPermisos.pack();
             jdPermisos.setLocationRelativeTo(null);
             jdPermisos.setModal(true);
@@ -904,7 +968,7 @@ public class main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_pwfPassKeyPressed
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+    private void bCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bCloseMouseClicked
         if (db != null) {
             try {
                 db.close();
@@ -924,12 +988,12 @@ public class main extends javax.swing.JFrame {
             }
         }
         System.exit(0);
-    }//GEN-LAST:event_jButton4MouseClicked
+    }//GEN-LAST:event_bCloseMouseClicked
 
     private void bSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bSaveMouseClicked
         try {
             FileClass toSave = new FileClass(3, "LUL", null, tpText.getText());
-            
+
             String text = tpText.getText();
             String[] parts = text.split("</p>");
             byte[][] bytes = new byte[parts.length][];
@@ -941,6 +1005,7 @@ public class main extends javax.swing.JFrame {
             if (db == null || db.isClosed()) {
                 db = con.createStatement();
             }
+
             curr.setText(text);
             db.executeUpdate("insert into files(Name,XML,OwnerID) values('" + curr.getName() + "',' " /*+ xml*/ + "'," + principal.getId() + ")");
         } catch (SQLException e) {
@@ -951,25 +1016,67 @@ public class main extends javax.swing.JFrame {
         AssignPermit(1);
     }//GEN-LAST:event_bReadOnlyMouseClicked
 
-    private void bWriteOnlyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bWriteOnlyMouseClicked
-        AssignPermit(2);
-    }//GEN-LAST:event_bWriteOnlyMouseClicked
-
     private void bReadWriteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bReadWriteMouseClicked
-        AssignPermit(3);
+        AssignPermit(2);
     }//GEN-LAST:event_bReadWriteMouseClicked
+
+    private void bLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bLogoutMouseClicked
+        try {
+            if (!db.isClosed()) {
+                db.close();
+            }
+            if (!con.isClosed()) {
+                con.close();
+            }
+            if (jdPermisos.isVisible()) {
+                jdPermisos.dispose();
+            }
+            jdMain.dispose();
+            tfUser.setText("");
+            pwfPass.setText("");
+            original.reload();
+            jtAdmin.setModel(original);
+
+            jdLogin.setVisible(true);
+        } catch (SQLException e) {
+
+        }
+    }//GEN-LAST:event_bLogoutMouseClicked
+
+    private void jmiAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAbrirActionPerformed
+        try {
+            tpText.setEditable(true);
+            curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
+            tpText.setText(curr.getText());
+            if (db.isClosed()) {
+                db = con.createStatement();
+            }
+            System.out.println("curr: " + curr.getID());
+            ResultSet getPermit = db.executeQuery("select Type from permissions where FileID=" + curr.getID());
+            if (getPermit.next()) {
+                System.out.println("get permit: " + getPermit.getInt(1));
+                if (getPermit.getInt(1) == 1) {
+                    tpText.setEditable(false);
+                } else {
+                    tpText.setEditable(true);
+                }
+            } else {
+                System.out.println("nope");
+                tpText.setEditable(false);
+            }
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_jmiAbrirActionPerformed
 
     public void AssignPermit(int PermitToAssign) {
         try {
-
             if (db == null) {
                 db = con.createStatement();
             }
             String name = cbListUsers.getSelectedItem().toString();
             String Permit = "";
-            if (PermitToAssign == 3) {
-                Permit = "Permiso de lectura y escritura";
-            } else if (PermitToAssign == 2) {
+            if (PermitToAssign == 2) {
                 Permit = "Permiso de solo Escritura";
             } else {
                 Permit = "Permiso de solo Lectura";
@@ -978,6 +1085,9 @@ public class main extends javax.swing.JFrame {
             if (getID.next()) {
                 int UserID = getID.getInt("ID");
                 getID.close();
+                if (curr == null) {
+                    System.out.println("Hola");
+                }
                 ResultSet check = db.executeQuery("select ID,Type from permissions where OwnerID=" + principal.getId() + " and UserID=" + UserID + " and FileID=" + curr.getID() + " limit 1");
                 if (check.next()) {
                     int checkType = check.getInt("Type");
@@ -1014,7 +1124,14 @@ public class main extends javax.swing.JFrame {
         try {
             String user = tfUser.getText();
             String password = String.valueOf(pwfPass.getPassword());
+
             if (!user.equals("") && !password.equals("")) {
+                if (con.isClosed()) {
+                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
+                }
+                if (db.isClosed()) {
+                    db = con.createStatement();
+                }
                 ResultSet usuario = db.executeQuery("select * from users where user='" + user + "' and pass='" + password + "'");
                 if (usuario.next()) {
                     principal = new User(usuario.getString("user"), usuario.getString("pass"), usuario.getInt("ID"));
@@ -1036,6 +1153,15 @@ public class main extends javax.swing.JFrame {
                     bAlignRight.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/right-align.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
                     bAlignCenter.setSize(60, 50);
                     bAlignCenter.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/center-align.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
+                    original = new DefaultTreeModel(new DefaultMutableTreeNode("Archivos"));
+                    DefaultMutableTreeNode root1 = (DefaultMutableTreeNode) original.getRoot();
+                    original.insertNodeInto(new DefaultMutableTreeNode("Tus Archivos"), root1, 0);
+                    original.insertNodeInto(new DefaultMutableTreeNode("Archivos compartidos"), root1, 1);
+                    original.insertNodeInto(new DefaultMutableTreeNode("Solo Lectura"), (DefaultMutableTreeNode) root1.getChildAt(1), 0);
+                    original.insertNodeInto(new DefaultMutableTreeNode("Lectura y Escritura"), (DefaultMutableTreeNode) root1.getChildAt(1), 1);
+
+                    jtAdmin.setModel(original);
+                    original.reload();
                     //UpdateText updt=new UpdateText(tpText);
                     //updt.start(); Thread para actualizar el texto durante la edicion. Comentado por que apenas esta funcional y para realizar pruebas de las otras funcionalidades
                     if (db == null) {
@@ -1047,17 +1173,24 @@ public class main extends javax.swing.JFrame {
                         DefaultMutableTreeNode root = (DefaultMutableTreeNode) Tmodel.getRoot();
                         DefaultMutableTreeNode YourFiles = (DefaultMutableTreeNode) Tmodel.getChild(root, 0);
                         DefaultMutableTreeNode shared = (DefaultMutableTreeNode) Tmodel.getChild(root, 1);
+                        DefaultMutableTreeNode shared1 = (DefaultMutableTreeNode) shared.getChildAt(0);
+                        DefaultMutableTreeNode shared2 = (DefaultMutableTreeNode) shared.getChildAt(1);
                         try (ResultSet GetFiles = db.executeQuery("select * from files where OwnerID=" + principal.getId())) {
                             while (GetFiles.next()) {
                                 YourFiles.add(new DefaultMutableTreeNode(new FileClass(GetFiles.getInt("ID"), GetFiles.getString("Name"), null, GetFiles.getString("XML"))));
                             }
                         }
                         Statement db2 = con.createStatement();
-                        ResultSet GetPermissions = db.executeQuery("select FileID from permissions where UserID=" + principal.getId());
+                        ResultSet GetPermissions = db.executeQuery("select Type,FileID from permissions where UserID=" + principal.getId());
                         while (GetPermissions.next()) {
                             try (ResultSet GetPermitFiles = db2.executeQuery("select * from files where ID=" + GetPermissions.getInt("FileID") + " limit 1")) {
                                 if (GetPermitFiles.next()) {
-                                    shared.add(new DefaultMutableTreeNode(new FileClass(GetPermitFiles.getInt("ID"), GetPermitFiles.getString("Name"), null, GetPermitFiles.getString("XML"))));
+                                    if (GetPermissions.getInt("Type") == 2) {
+                                        shared2.add(new DefaultMutableTreeNode(new FileClass(GetPermitFiles.getInt("ID"), GetPermitFiles.getString("Name"), null, GetPermitFiles.getString("XML"))));
+                                    } else {
+                                        shared1.add(new DefaultMutableTreeNode(new FileClass(GetPermitFiles.getInt("ID"), GetPermitFiles.getString("Name"), null, GetPermitFiles.getString("XML"))));
+                                    }
+
                                 }
 
                             }
@@ -1077,8 +1210,7 @@ public class main extends javax.swing.JFrame {
                             root.add(new DefaultMutableTreeNode(toAdd));
                         }
 
-                    }
-                    
+                    }                   
                     db2.close();*/
                     jdMain.pack();
                     jdMain.setLocationRelativeTo(this);
@@ -1096,6 +1228,7 @@ public class main extends javax.swing.JFrame {
             }
         } catch (InputMismatchException | SQLException e) {
             JOptionPane.showMessageDialog(jdLogin, "Usuario no encontrado. Verifique sus credenciales o registre una cuenta primero");
+            e.printStackTrace();
         }
         tfUser.setText("");
         pwfPass.setText("");
@@ -1128,23 +1261,23 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton bAlignRight;
     private javax.swing.JButton bBold;
     private javax.swing.JButton bCheckCredentials;
+    private javax.swing.JButton bClose;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bExitLogin;
     private javax.swing.JButton bIncreaseSize;
     private javax.swing.JButton bItalic;
     private javax.swing.JButton bLoadFile;
     private javax.swing.JButton bLogin;
+    private javax.swing.JButton bLogout;
     private javax.swing.JButton bReadOnly;
     private javax.swing.JButton bReadWrite;
     private javax.swing.JButton bReduceSize;
     private javax.swing.JButton bST;
     private javax.swing.JButton bSave;
     private javax.swing.JButton bUnderline;
-    private javax.swing.JButton bWriteOnly;
     private javax.swing.JButton bXMLFile;
     private javax.swing.JComboBox<String> cbListUsers;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1163,9 +1296,10 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JDialog jdPermisos;
     private javax.swing.JLabel jlLogo;
     private javax.swing.JLabel jlTextSize;
+    private javax.swing.JMenuItem jmiAbrir;
     private javax.swing.JMenuItem jmiDelete;
     private javax.swing.JMenuItem jmiPermiso;
-    private javax.swing.JPopupMenu jpmAdmin;
+    private javax.swing.JPopupMenu jpmAdminFiles;
     private javax.swing.JTree jtAdmin;
     private javax.swing.JTabbedPane jtpEditorOptions;
     private javax.swing.JPasswordField pwfPass;
