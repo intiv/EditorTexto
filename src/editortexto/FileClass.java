@@ -24,7 +24,7 @@ public class FileClass {
     private String name;
     //private byte[][] sections;
     private String text;
-    
+
 
     public FileClass() {
         ID=-1;
@@ -33,21 +33,14 @@ public class FileClass {
         //sections=null;
     }
 
-    public FileClass(int ID, String name, byte[][] bytes) {
+    public FileClass(int ID, String name, String text) {
         this.ID = ID;
         this.name = name;
-        
+        this.text=text;
         //this.sections = sections;
     }
 
-    public FileClass(int ID, String name, byte[][] bytes,String text) {
-        this.ID = ID;
-        this.name = name;
-        //this.sections = sections;
-        this.text=text;
-    }
-    
-    
+   
  //   public byte[][] getSections() {
   //      return sections;
   //  }
@@ -112,4 +105,5 @@ public class FileClass {
     public void setText(String text) {
         this.text = text;
     }
+    
 }

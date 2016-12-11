@@ -1,18 +1,12 @@
 package editortexto;
 
 import com.sun.glass.events.KeyEvent;
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -38,6 +32,13 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.Utilities;
+import javax.swing.text.html.HTML;
+import org.jsoup.Jsoup;
 
 /*
 ********************************************************************************************* 
@@ -70,6 +71,16 @@ public class main extends javax.swing.JFrame {
         initComponents();
         tpText.setText("");
         this.setLocationRelativeTo(null);
+        /*FUNCIONA CON DOC PERO NO DOCX
+        try {
+            FileWriter fos = new FileWriter(new File("C:/Users/Inti Velasquez/Desktop/THISISTEST.doc"));
+            BufferedWriter bos=new BufferedWriter(fos);
+            bos.write("hola como le cuelga");
+            bos.close();
+            fos.close();
+        } catch (IOException e) {
+
+        }*/
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
             db = con.createStatement();
@@ -80,13 +91,12 @@ public class main extends javax.swing.JFrame {
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         !!!!!!!!!!!!!!!!!!ESTO FUNCIONA NO BORRAR ESTO FUNCIONA NO BORRAR!!!!!!!!!!!!!!!!!!!!
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         
         try {
-
-           
-            URL url = new URL("ftp://UsuarioOA%40webbpa.com:Seccion25@ftp.webbpa.com/Test.txt");
+            URL url = new URL("ftp://UsuarioOA%40webbpa.com:Seccion25@ftp.webbpa.com/Test2.txt");
             URLConnection conn = url.openConnection();
             OutputStream os = conn.getOutputStream();
-            FileInputStream is = new FileInputStream("C:\\Users\\Inti Velasquez\\Desktop\\Test.txt");
+            FileInputStream is = new FileInputStream(new File("Test2.txt"));
             byte[] buffer = new byte[30];
             int BytesRead = -1;
             while ((BytesRead = is.read(buffer)) != -1) {
@@ -94,8 +104,8 @@ public class main extends javax.swing.JFrame {
             }
             is.close();
             os.close();
-            System.out.println("ya");
         } catch (IOException ex) {
+
         }*/
         jlTextSize.setText(TextSize + "");
     }
@@ -105,14 +115,13 @@ public class main extends javax.swing.JFrame {
     private void initComponents() {
 
         jdLogin = new javax.swing.JDialog();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
         tfUser = new javax.swing.JTextField();
         pwfPass = new javax.swing.JPasswordField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         bCheckCredentials = new javax.swing.JButton();
         bExitLogin = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jdMain = new javax.swing.JDialog();
         jPanel4 = new javax.swing.JPanel();
         jtpEditorOptions = new javax.swing.JTabbedPane();
@@ -155,15 +164,18 @@ public class main extends javax.swing.JFrame {
         bLogin = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
 
-        jLabel1.setText("Usuario:");
-
-        jLabel2.setText("Contraseña:");
+        jPanel5.setBackground(new java.awt.Color(51, 51, 255));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
 
         pwfPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 pwfPassKeyPressed(evt);
             }
         });
+
+        jLabel1.setText("Usuario:");
+
+        jLabel2.setText("Contraseña:");
 
         bCheckCredentials.setText("Iniciar Sesion");
         bCheckCredentials.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -179,70 +191,66 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Ingrese su usuario y contraseña para iniciar sesion. ");
-
-        jLabel4.setText("Si no tiene una cuenta, Registrese en el menu principal.");
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfUser, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pwfPass, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(65, 65, 65))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(191, 191, 191)
+                        .addComponent(bCheckCredentials, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(226, 226, 226)
+                        .addComponent(bExitLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pwfPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(28, 28, 28)
+                .addComponent(bCheckCredentials)
+                .addGap(18, 18, 18)
+                .addComponent(bExitLogin)
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jdLoginLayout = new javax.swing.GroupLayout(jdLogin.getContentPane());
         jdLogin.getContentPane().setLayout(jdLoginLayout);
         jdLoginLayout.setHorizontalGroup(
             jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdLoginLayout.createSequentialGroup()
-                .addGroup(jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jdLoginLayout.createSequentialGroup()
-                        .addGap(198, 198, 198)
-                        .addGroup(jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(bCheckCredentials, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bExitLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jdLoginLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(tfUser)
-                                .addComponent(pwfPass, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
-                            .addComponent(jLabel4))))
-                .addContainerGap(39, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jdLoginLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jdLoginLayout.setVerticalGroup(
             jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdLoginLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addGap(36, 36, 36)
-                .addGroup(jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jdLoginLayout.createSequentialGroup()
-                        .addComponent(tfUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addGroup(jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(pwfPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addComponent(bCheckCredentials)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bExitLogin)
-                        .addGap(23, 23, 23))
-                    .addGroup(jdLoginLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         jdMain.setBackground(new java.awt.Color(51, 51, 255));
 
-        jPanel4.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel4.setBackground(new java.awt.Color(5, 5, 35));
         jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 153)));
 
         jtpEditorOptions.setBackground(new java.awt.Color(102, 102, 102));
-        jtpEditorOptions.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 153), 5, true));
+        jtpEditorOptions.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -447,10 +455,17 @@ public class main extends javax.swing.JFrame {
 
         jtpEditorOptions.addTab("Archivos", jPanel3);
 
-        tpText.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 102), 5));
-        tpText.setContentType("text"); // NOI18N
+        tpText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
+        tpText.setContentType("text/html"); // NOI18N
+        tpText.setText("<html>\r\n  <head>\r\n\r\n  </head>\r\n  <body>\r\n    <p>\r\n      \r\n    </p>\r\n  </body>\r\n</html>\r\n"); // NOI18N
+        tpText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tpTextMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tpText);
 
+        jtAdmin.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Archivos");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Tus Archivos");
         treeNode1.add(treeNode2);
@@ -499,15 +514,15 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(24, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 796, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(bLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addComponent(bClose, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(123, 123, 123))))
+                        .addGap(123, 123, 123))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1078, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -525,9 +540,9 @@ public class main extends javax.swing.JFrame {
                             .addComponent(bLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(bClose, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
@@ -693,7 +708,6 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_bCheckCredentialsMouseClicked
 
     private void bExitLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bExitLoginMouseClicked
-
         jdLogin.dispose();
         if (!this.isVisible()) {
             try {
@@ -737,6 +751,12 @@ public class main extends javax.swing.JFrame {
             MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
             StyleConstants.setBold(mas, !StyleConstants.isBold(as));//toggle bold/negrita
             document.setCharacterAttributes(start, end, mas, true);//setear estilo   
+        } else {
+            StyledDocument document = (StyledDocument) tpText.getDocument();
+            AttributeSet as = document.getCharacterElement(0).getAttributes();
+            MutableAttributeSet mas = new SimpleAttributeSet(as.copyAttributes());
+            StyleConstants.setBold(mas, !StyleConstants.isBold(as));
+
         }
     }//GEN-LAST:event_bBoldMouseClicked
 
@@ -812,7 +832,7 @@ public class main extends javax.swing.JFrame {
                             id = HighestID.getInt(1);
                         }
                     } catch (SQLException ErrorRetrieving) {
-
+                        ErrorRetrieving.printStackTrace();
                     }
                     curr = new FileClass();
                     curr.setName(CurrentFile.getName());
@@ -824,7 +844,7 @@ public class main extends javax.swing.JFrame {
                 }
             }
         } catch (NullPointerException | IOException | BadLocationException e) {
-
+            e.printStackTrace();
         }
     }//GEN-LAST:event_bLoadFileMouseClicked
 
@@ -833,10 +853,9 @@ public class main extends javax.swing.JFrame {
             int start = tpText.getSelectionStart();
             int end = tpText.getSelectionEnd();
             StyledDocument sd = tpText.getStyledDocument();
-            MutableAttributeSet SAS = tpText.getInputAttributes();
-            StyleConstants.setAlignment(SAS, StyleConstants.ALIGN_LEFT);
-            sd.setParagraphAttributes(start, end, SAS, true);
-
+            MutableAttributeSet MAS = tpText.getInputAttributes();
+            StyleConstants.setAlignment(MAS, StyleConstants.ALIGN_LEFT);
+            sd.setParagraphAttributes(start, end, MAS, true);
         }
     }//GEN-LAST:event_bAlignLeftMouseClicked
 
@@ -845,9 +864,9 @@ public class main extends javax.swing.JFrame {
             int start = tpText.getSelectionStart();
             int end = tpText.getSelectionEnd();
             StyledDocument sd = tpText.getStyledDocument();
-            MutableAttributeSet SAS = tpText.getInputAttributes();
-            StyleConstants.setAlignment(SAS, StyleConstants.ALIGN_RIGHT);
-            sd.setParagraphAttributes(start, end, SAS, true);
+            MutableAttributeSet MAS = tpText.getInputAttributes();
+            StyleConstants.setAlignment(MAS, StyleConstants.ALIGN_RIGHT);
+            sd.setParagraphAttributes(start, end, MAS, true);
         }
     }//GEN-LAST:event_bAlignRightMouseClicked
 
@@ -876,50 +895,18 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_bUnderlineMouseClicked
 
     private void bXMLFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bXMLFileMouseClicked
-        String texto = tpText.getText();
-        int size = texto.length();
-        boolean remaining = size > 0;
-        float asd = (float) size / (float) 30;
-        int cuantos = (int) Math.ceil(asd);
-        byte[][] bytes = new byte[cuantos][30];
-        int pos = 0;
-        // !TERMINAR: falta hacerlo bien para crear los bloques de bytes adecuados para ser considerados una 'pagina'
-        while (remaining) {
-            if (size >= 30) {
-                String sub = texto.substring(0, 30);
-                bytes[pos] = sub.getBytes(Charset.forName("UTF-8"));
-                texto = texto.substring(30, texto.length());
-
-            } else if (size > 0 && size < 30) {
-                String sub = texto.substring(0, texto.length());
-                bytes[pos] = sub.getBytes(Charset.forName("UTF-8"));
-                texto = "";
-            }
-            if (pos < cuantos) {
-                pos++;
-            }
-            size = texto.length();
-            remaining = size > 0;
+        if (curr != null) {
+            System.out.println(curr.Serialize());
         }
-        System.out.println("===================== PRUEBA =======================");
-        System.out.println("----------------------------------------------------\n");
-        for (int i = 0; i < cuantos; i++) {
-            System.out.println(Arrays.toString(bytes[i]));
-        }
-        FileClass prueba = new FileClass(1, "Prueba.txt", bytes);
-        String ser = prueba.Serialize();
-        System.out.println("Serializado: " + ser);
-        prueba = new FileClass();
-        prueba = prueba.Deserialize(ser);
-        System.out.println("Deserializado: " + prueba.toString());
 
     }//GEN-LAST:event_bXMLFileMouseClicked
 
     private void jtAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtAdminMouseClicked
         if (SwingUtilities.isRightMouseButton(evt)) {
-
             jtAdmin.setSelectionRow(jtAdmin.getClosestRowForLocation(evt.getX(), evt.getY()));
+
             if (jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Tus Archivos")) {
+
                 jmiPermiso.setEnabled(true);
                 jmiDelete.setEnabled(true);
                 jpmAdminFiles.show(jtAdmin, evt.getX(), evt.getY());
@@ -929,25 +916,24 @@ public class main extends javax.swing.JFrame {
                 jmiDelete.setEnabled(false);
                 jpmAdminFiles.show(jtAdmin, evt.getX(), evt.getY());
             }
-
         }
     }//GEN-LAST:event_jtAdminMouseClicked
 
     private void jmiPermisoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPermisoActionPerformed
-
         try {
-
             DefaultComboBoxModel model = new DefaultComboBoxModel();
             if (db == null) {
                 db = con.createStatement();
             }
+            if (curr == null) {
+                curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
 
+            }
             ResultSet rs = db.executeQuery("select user from users where ID!=" + principal.getId());
             while (rs.next()) {
                 model.addElement(rs.getString("user"));
             }
             cbListUsers.setModel(model);
-
             tfPermisosFileName.setText(((FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject()).getName());
             jdPermisos.pack();
             jdPermisos.setLocationRelativeTo(null);
@@ -971,7 +957,9 @@ public class main extends javax.swing.JFrame {
     private void bCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bCloseMouseClicked
         if (db != null) {
             try {
-                db.close();
+                if (!db.isClosed()) {
+                    db.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -980,7 +968,9 @@ public class main extends javax.swing.JFrame {
         }
         if (con != null) {
             try {
-                con.close();
+                if (!con.isClosed()) {
+                    con.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -992,23 +982,46 @@ public class main extends javax.swing.JFrame {
 
     private void bSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bSaveMouseClicked
         try {
-            FileClass toSave = new FileClass(3, "LUL", null, tpText.getText());
+            FileClass toSave = new FileClass(3, "LUL", tpText.getText());
 
             String text = tpText.getText();
+            System.out.println(text);
             String[] parts = text.split("</p>");
-            byte[][] bytes = new byte[parts.length][];
             for (int i = 0; i < parts.length; i++) {
-                bytes[i] = parts[i].getBytes();
+                System.out.println(i + "  \n" + parts[i] + "\n");
+            }
+            byte[][] bytes = new byte[parts.length][];
+            String encoded = "";
+            System.out.println("Partes: " + parts.length);
+            System.out.println("BYTES:\n");
+
+            for (int i = 0; i < parts.length; i++) {
+                bytes[i] = parts[i].getBytes("UTF-8");
+                encoded += Base64.encode(bytes[i]);
+                System.out.println(Arrays.toString(bytes[i]));
+            }
+
+            System.out.println("CODIFICADO: \n" + encoded);
+            com.sun.org.apache.xml.internal.security.Init.init();
+            byte[] decoded = Base64.decode(encoded);
+            System.out.println("\n\nDESCODIFICADO: \n" + Arrays.toString(decoded));
+            String transformed = new String(decoded, "UTF-8");
+            System.out.println("TRANSFORMADO:\n" + transformed);
+            if (transformed.equals(encoded)) {
+                System.out.println("YEP");
             }
             String xml = toSave.Serialize();
-
+            System.out.println(xml);
             if (db == null || db.isClosed()) {
                 db = con.createStatement();
             }
+//            curr.setText(text);
 
-            curr.setText(text);
-            db.executeUpdate("insert into files(Name,XML,OwnerID) values('" + curr.getName() + "',' " /*+ xml*/ + "'," + principal.getId() + ")");
-        } catch (SQLException e) {
+            //db.executeUpdate("insert into files(Name,XML,OwnerID) values('" + curr.getName() + "',' " /*+ xml*/ + "'," + principal.getId() + ")");
+        } catch (SQLException | Base64DecodingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bSaveMouseClicked
 
@@ -1046,7 +1059,10 @@ public class main extends javax.swing.JFrame {
     private void jmiAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAbrirActionPerformed
         try {
             tpText.setEditable(true);
+            TextSize = 12;
+
             curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
+            System.out.println(curr.toString());
             tpText.setText(curr.getText());
             if (db.isClosed()) {
                 db = con.createStatement();
@@ -1069,6 +1085,91 @@ public class main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmiAbrirActionPerformed
 
+    private void tpTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tpTextMouseClicked
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            String text = tpText.getText();
+
+            org.jsoup.nodes.Document doc = Jsoup.parse(text);
+            for (int i = 0; i < doc.getAllElements().size(); i++) {
+                System.out.println(i + ", " + doc.getAllElements().get(i).toString());
+            }
+            System.out.println("----------------------------------------------------------");
+            if ("    <p>".equals("    <" + HTML.Tag.P + ">")) {
+                System.out.println("holiwis");
+            }
+            String[] split = text.split("\n");
+            ArrayList<String> lineas = new ArrayList();
+            System.out.println("ORIGINAL\n-------------------------------------------------------------");
+            for (int i = 0; i < split.length; i++) {
+                System.out.println(split[i]);
+            }
+            System.out.println("==================================================");
+            for (int i = 0; i < split.length; i++) {
+                System.out.println("SPLIT[I]: " + split[i]);
+                if (split[i].equals("<" + HTML.Tag.P + ">")) {
+                    System.out.println("primero: " + i + ", " + split[i]);
+                } else if (split[i].equals("    <" + HTML.Tag.P + ">")) {
+                    System.out.println("segundo: " + i + ", " + split[i]);
+                }
+            }
+            System.out.println("--------------------------------------------    ");
+            for (int i = 0; i < split.length; i++) {
+                if (split[i].equals("<p>")) {
+                    String Actuelle = split[i + 1];
+                    if (Actuelle.contains("<i>") || Actuelle.contains("<b>") || Actuelle.contains("<strike>") || Actuelle.contains("<u>")) {
+                        if (Actuelle.contains("</i>") || Actuelle.contains("</b>") || Actuelle.contains("</strike>") || Actuelle.contains("</u>")) {
+
+                        } else if (split[i + 2].contains("</i>") || split[i + 2].contains("</b>") || split[i + 2].contains("</strike>") || split[i + 2].contains("</u>")) {
+
+                        }
+                    }
+                    System.out.println(lineas.get(lineas.size() - 1));
+                }
+            }
+        } else {
+            try {
+
+                Document doc = tpText.getDocument();
+                System.out.println(tpText.getCaretPosition());
+                String texto2 = doc.getText(0, doc.getLength());
+                System.out.println(texto2);
+                System.out.println("-----------------------------");
+
+                String[] partes = texto2.split("\n");
+                Block[] blocks = new Block[partes.length];
+                System.out.println(partes.length);
+                for (int i = 0; i < partes.length; i++) {
+                    System.out.println(i + ", " + partes[i]);
+                    blocks[i] = new Block(i, false, partes[i]);
+                }
+                DefaultCaret car=(DefaultCaret)tpText.getCaret();
+                car.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+                blocks[1].setModifiying(true);
+                blocks[3].setModifiying(true);
+
+                int caretPos = tpText.getCaretPosition();
+                int rowNum = (caretPos == 0) ? 1 : 0;
+                for (int offset = caretPos; offset > 0;) {
+                    offset = Utilities.getRowStart(tpText, offset) - 1;
+                    rowNum++;
+                }
+                if (rowNum > 0) {
+                    rowNum--;
+                }
+                if (blocks[rowNum ].isModifiying()) {
+                    JOptionPane.showMessageDialog(jdMain, "Ese bloque esta siendo modificado");
+                    blocks[1].setModifiying(false);
+                    tpText.setFocusable(false);
+                    tpText.setFocusable(true);
+                }
+                System.out.println("Row: " + rowNum);
+
+            } catch (BadLocationException ex) {
+                Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tpTextMouseClicked
+
     public void AssignPermit(int PermitToAssign) {
         try {
             if (db == null) {
@@ -1077,7 +1178,7 @@ public class main extends javax.swing.JFrame {
             String name = cbListUsers.getSelectedItem().toString();
             String Permit = "";
             if (PermitToAssign == 2) {
-                Permit = "Permiso de solo Escritura";
+                Permit = "Permiso de Escritura";
             } else {
                 Permit = "Permiso de solo Lectura";
             }
@@ -1086,7 +1187,7 @@ public class main extends javax.swing.JFrame {
                 int UserID = getID.getInt("ID");
                 getID.close();
                 if (curr == null) {
-                    System.out.println("Hola");
+                    curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
                 }
                 ResultSet check = db.executeQuery("select ID,Type from permissions where OwnerID=" + principal.getId() + " and UserID=" + UserID + " and FileID=" + curr.getID() + " limit 1");
                 if (check.next()) {
@@ -1094,7 +1195,7 @@ public class main extends javax.swing.JFrame {
                     int PermitID = check.getInt("ID");
                     check.close();
                     if (checkType > PermitToAssign) {
-                        int decide = JOptionPane.showConfirmDialog(jdPermisos, "\tEl usuario " + name + " tiene permisos mayores en el archivo.\nDesea actualizar el permiso a solo lectura?", "Confirme su elección", JOptionPane.YES_NO_OPTION);
+                        int decide = JOptionPane.showConfirmDialog(jdPermisos, "\tEl usuario " + name + " tiene permisos completos en el archivo.\nDesea actualizar el permiso a solo lectura?", "Confirme su elección", JOptionPane.YES_NO_OPTION);
                         if (decide == JOptionPane.YES_OPTION) {
                             db.executeUpdate("update permissions set Type=" + PermitToAssign + " where ID=" + PermitID + " limit 1");
                             JOptionPane.showMessageDialog(jdPermisos, Permit + " asignado con exito a " + name);
@@ -1167,7 +1268,6 @@ public class main extends javax.swing.JFrame {
                     if (db == null) {
                         db = con.createStatement();
                     }
-                    //ResultSet rs = db.executeQuery("select FileID from permissions where OwnerID=" + principal.getId());
                     try {
                         DefaultTreeModel Tmodel = (DefaultTreeModel) jtAdmin.getModel();
                         DefaultMutableTreeNode root = (DefaultMutableTreeNode) Tmodel.getRoot();
@@ -1176,8 +1276,10 @@ public class main extends javax.swing.JFrame {
                         DefaultMutableTreeNode shared1 = (DefaultMutableTreeNode) shared.getChildAt(0);
                         DefaultMutableTreeNode shared2 = (DefaultMutableTreeNode) shared.getChildAt(1);
                         try (ResultSet GetFiles = db.executeQuery("select * from files where OwnerID=" + principal.getId())) {
+                            GetFiles.last();
+                            GetFiles.beforeFirst();
                             while (GetFiles.next()) {
-                                YourFiles.add(new DefaultMutableTreeNode(new FileClass(GetFiles.getInt("ID"), GetFiles.getString("Name"), null, GetFiles.getString("XML"))));
+                                YourFiles.add(new DefaultMutableTreeNode(new FileClass(GetFiles.getInt("ID"), GetFiles.getString("Name"), GetFiles.getString("XML"))));
                             }
                         }
                         Statement db2 = con.createStatement();
@@ -1186,32 +1288,19 @@ public class main extends javax.swing.JFrame {
                             try (ResultSet GetPermitFiles = db2.executeQuery("select * from files where ID=" + GetPermissions.getInt("FileID") + " limit 1")) {
                                 if (GetPermitFiles.next()) {
                                     if (GetPermissions.getInt("Type") == 2) {
-                                        shared2.add(new DefaultMutableTreeNode(new FileClass(GetPermitFiles.getInt("ID"), GetPermitFiles.getString("Name"), null, GetPermitFiles.getString("XML"))));
+                                        shared2.add(new DefaultMutableTreeNode(new FileClass(GetPermitFiles.getInt("ID"), GetPermitFiles.getString("Name"), GetPermitFiles.getString("XML"))));
                                     } else {
-                                        shared1.add(new DefaultMutableTreeNode(new FileClass(GetPermitFiles.getInt("ID"), GetPermitFiles.getString("Name"), null, GetPermitFiles.getString("XML"))));
+                                        shared1.add(new DefaultMutableTreeNode(new FileClass(GetPermitFiles.getInt("ID"), GetPermitFiles.getString("Name"), GetPermitFiles.getString("XML"))));
                                     }
-
                                 }
-
                             }
                         }
                         GetPermissions.close();
                         Tmodel.reload(root);
                         jtAdmin.setModel(Tmodel);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(jdMain, "Ocurrio un error obteniendo sus archivos de la base de datos. Use la opcion 'Actualizar' del arbol");
                     }
-                    //Statement db2 = con.createStatement();
-
-                    /*while (rs.next()) {
-                        ResultSet files = db2.executeQuery("select * from files where ID=" + rs.getInt("FileID"));
-                        if (files.next()) {
-                            FileClass toAdd = new FileClass(files.getInt("ID"), files.getString("Name"), null, files.getString("XML"));
-                            root.add(new DefaultMutableTreeNode(toAdd));
-                        }
-
-                    }                   
-                    db2.close();*/
                     jdMain.pack();
                     jdMain.setLocationRelativeTo(this);
                     jdMain.setModal(true);
@@ -1227,8 +1316,7 @@ public class main extends javax.swing.JFrame {
                 pwfPass.setText("");
             }
         } catch (InputMismatchException | SQLException e) {
-            JOptionPane.showMessageDialog(jdLogin, "Usuario no encontrado. Verifique sus credenciales o registre una cuenta primero");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(jdLogin, "Usuario no encontrado. Verifique sus credenciales e intente de nuevo");
         }
         tfUser.setText("");
         pwfPass.setText("");
@@ -1280,8 +1368,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1289,6 +1375,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JDialog jdLogin;
