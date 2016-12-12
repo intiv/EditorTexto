@@ -5,6 +5,7 @@
  */
 package editortexto;
 
+import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
@@ -18,37 +19,34 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Inti Velasquez
  */
-@XmlRootElement(name="file")
+@XmlRootElement(name = "file")
 public class FileClass {
+
     private int ID;
     private String name;
     //private byte[][] sections;
     private String text;
 
-
     public FileClass() {
-        ID=-1;
-        name="";
-        text="";
+        ID = -1;
+        name = "";
+        text = "";
         //sections=null;
     }
 
     public FileClass(int ID, String name, String text) {
         this.ID = ID;
         this.name = name;
-        this.text=text;
+        this.text = text;
         //this.sections = sections;
     }
 
-   
- //   public byte[][] getSections() {
-  //      return sections;
-  //  }
-
-   // public void setSections(byte[][] sections) {
-   //     this.sections = sections;
-   // }
-
+    //   public byte[][] getSections() {
+    //      return sections;
+    //  }
+    // public void setSections(byte[][] sections) {
+    //     this.sections = sections;
+    // }
     @XmlElement
     public int getID() {
         return ID;
@@ -67,31 +65,30 @@ public class FileClass {
         this.name = name;
     }
 
-
     @Override
     public String toString() {
-        return "FileClass{" + "ID=" + ID + ", name=" + name + ", sections="/* + Arrays.deepToString(sections) */+ '}';
+        return "FileClass{" + "ID=" + ID + ", name=" + name + ", sections="/* + Arrays.deepToString(sections) */ + '}';
     }
-    
-    public String Serialize(){
-        try{
-            StringWriter sw=new StringWriter();
-            JAXBContext context=JAXBContext.newInstance(FileClass.class);
-            Marshaller m=context.createMarshaller();
+
+    public String Serialize() {
+        try {
+            StringWriter sw = new StringWriter();
+            JAXBContext context = JAXBContext.newInstance(FileClass.class);
+            Marshaller m = context.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             m.marshal(this, sw);
             return sw.toString();
-        }catch(JAXBException CantSerialize){
+        } catch (JAXBException CantSerialize) {
             return "Error";
         }
     }
-    
-    public FileClass Deserialize(String xml){
-        try{
-            JAXBContext context=JAXBContext.newInstance(FileClass.class);
-            Unmarshaller um=context.createUnmarshaller();
-            return (FileClass)um.unmarshal(new StringReader(xml));
-        }catch(JAXBException CantDeserialize){
+
+    public FileClass Deserialize(String xml) {
+        try {
+            JAXBContext context = JAXBContext.newInstance(FileClass.class);
+            Unmarshaller um = context.createUnmarshaller();
+            return (FileClass) um.unmarshal(new StringReader(xml));
+        } catch (JAXBException CantDeserialize) {
             System.out.println("Error deserializando");
             return null;
         }
@@ -105,5 +102,5 @@ public class FileClass {
     public void setText(String text) {
         this.text = text;
     }
-    
+
 }
