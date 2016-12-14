@@ -33,8 +33,11 @@ import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
+import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -47,6 +50,9 @@ import javax.swing.text.html.HTML;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.jsoup.Jsoup;
 
 /*
@@ -85,10 +91,14 @@ public class main extends javax.swing.JFrame {
         OriginalTable = (DefaultTableModel) jtReport.getModel();
         tpText.setText("");
         this.setLocationRelativeTo(null);
-
+        jlFrameIcon.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/sol.png").getImage().getScaledInstance(200, 180, Image.SCALE_SMOOTH)));
+        
+        
+        
+        
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
-            db=con.createStatement();
+            db = con.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -143,6 +153,7 @@ public class main extends javax.swing.JFrame {
         bClose = new javax.swing.JButton();
         bLogout = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jlIcon = new javax.swing.JLabel();
         jmbMain = new javax.swing.JMenuBar();
         jmFile = new javax.swing.JMenu();
         jmiOpenFile = new javax.swing.JMenuItem();
@@ -178,10 +189,11 @@ public class main extends javax.swing.JFrame {
         bExportfile = new javax.swing.JButton();
         rbgExport = new javax.swing.ButtonGroup();
         jdLog = new javax.swing.JDialog();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        taLog = new javax.swing.JTextArea();
-        bCloseLog = new javax.swing.JButton();
+        jpLog = new javax.swing.JPanel();
         bSaveLog = new javax.swing.JButton();
+        bCloseLog = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tpLog = new javax.swing.JTextPane();
         jdReport = new javax.swing.JDialog();
         jpReport = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -194,13 +206,20 @@ public class main extends javax.swing.JFrame {
         bGenerateReport = new javax.swing.JButton();
         checkOrder = new javax.swing.JCheckBox();
         rbgReport = new javax.swing.ButtonGroup();
+        jPanel8 = new javax.swing.JPanel();
+        jlTitle = new javax.swing.JLabel();
         bLogin = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
+        jlFrameIcon = new javax.swing.JLabel();
 
         jdLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        jdLogin.setTitle("Log in");
+        jdLogin.setTitle("Bienvenido a Sun Files!");
+        jdLogin.setMaximumSize(null);
+        jdLogin.setMinimumSize(null);
+        jdLogin.setPreferredSize(new java.awt.Dimension(590, 300));
+        jdLogin.setResizable(false);
 
-        jPanel5.setBackground(new java.awt.Color(51, 51, 255));
+        jPanel5.setBackground(new java.awt.Color(51, 51, 180));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
 
         pwfPass.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -232,7 +251,7 @@ public class main extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
+                .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
@@ -240,15 +259,15 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tfUser, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pwfPass, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(65, 65, 65))
+                .addGap(59, 59, 59))
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(191, 191, 191)
-                        .addComponent(bCheckCredentials, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(226, 226, 226)
-                        .addComponent(bExitLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(bExitLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(192, 192, 192)
+                        .addComponent(bCheckCredentials, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -262,25 +281,27 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pwfPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(bCheckCredentials)
                 .addGap(18, 18, 18)
                 .addComponent(bExitLogin)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jdLoginLayout = new javax.swing.GroupLayout(jdLogin.getContentPane());
         jdLogin.getContentPane().setLayout(jdLoginLayout);
         jdLoginLayout.setHorizontalGroup(
             jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jdLoginLayout.setVerticalGroup(
             jdLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jdMain.setTitle("Sun Files");
         jdMain.setBackground(new java.awt.Color(51, 51, 255));
+        jdMain.setResizable(false);
 
         jpMain.setBackground(new java.awt.Color(0, 0, 80));
         jpMain.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 153)));
@@ -397,7 +418,7 @@ public class main extends javax.swing.JFrame {
 
         jtpEditorOptions.addTab("Letra", jPanel1);
 
-        jPanel2.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
 
         bAlignLeft.setBackground(new java.awt.Color(0, 0, 0));
         bAlignLeft.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -452,7 +473,7 @@ public class main extends javax.swing.JFrame {
 
         jtpEditorOptions.addTab("Formato", jPanel2);
 
-        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel3.setBackground(new java.awt.Color(51, 51, 51));
 
         bLoadFile.setText("Abrir Archivo");
         bLoadFile.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -492,6 +513,8 @@ public class main extends javax.swing.JFrame {
 
         jtpEditorOptions.addTab("Archivos", jPanel3);
 
+        tpText.setEditable(false);
+        tpText.setBackground(new java.awt.Color(245, 245, 245));
         tpText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
         tpText.setContentType("text/html"); // NOI18N
         tpText.setText("<html>\r\n  <head>\r\n\r\n  </head>\r\n  <body>\r\n    <p>\r\n      \r\n    </p>\r\n  </body>\r\n</html>\r\n"); // NOI18N
@@ -510,7 +533,9 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tpText);
 
+        jtAdmin.setBackground(new java.awt.Color(51, 51, 51));
         jtAdmin.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
+        jtAdmin.setForeground(new java.awt.Color(0, 51, 255));
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Archivos");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Tus Archivos");
         treeNode1.add(treeNode2);
@@ -529,6 +554,8 @@ public class main extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jtAdmin);
+
+        jPanel7.setBackground(new java.awt.Color(51, 51, 51));
 
         bClose.setText("Exit");
         bClose.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -581,12 +608,15 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpMainLayout.createSequentialGroup()
                         .addGap(57, 57, 57)
-                        .addComponent(jlLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(201, 201, 201))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMainLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(jlLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMainLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpMainLayout.createSequentialGroup()
+                            .addGap(27, 27, 27)
+                            .addComponent(jlIcon))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jpMainLayout.createSequentialGroup()
                         .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 796, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -600,7 +630,9 @@ public class main extends javax.swing.JFrame {
             .addGroup(jpMainLayout.createSequentialGroup()
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpMainLayout.createSequentialGroup()
-                        .addGap(76, 76, 76)
+                        .addGap(22, 22, 22)
+                        .addComponent(jlIcon)
+                        .addGap(52, 52, 52)
                         .addComponent(jlLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMainLayout.createSequentialGroup()
@@ -699,6 +731,7 @@ public class main extends javax.swing.JFrame {
 
         jdPermisos.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jdPermisos.setTitle("Asignar permiso");
+        jdPermisos.setResizable(false);
 
         jLabel5.setText("Usuario: ");
 
@@ -779,6 +812,7 @@ public class main extends javax.swing.JFrame {
         );
 
         jdExport.setTitle("Exportar archivos");
+        jdExport.setResizable(false);
 
         jPanel6.setBackground(new java.awt.Color(30, 100, 230));
         jPanel6.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 102)));
@@ -804,6 +838,11 @@ public class main extends javax.swing.JFrame {
 
         rbgExport.add(rbRTF);
         rbRTF.setText("RTF");
+        rbRTF.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbRTFMouseClicked(evt);
+            }
+        });
 
         rbgExport.add(rbXML);
         rbXML.setText("XML");
@@ -871,19 +910,11 @@ public class main extends javax.swing.JFrame {
         );
 
         jdLog.setTitle("Bitacora de Actividad");
+        jdLog.setBackground(new java.awt.Color(0, 51, 102));
+        jdLog.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jdLog.setResizable(false);
 
-        taLog.setEditable(false);
-        taLog.setColumns(20);
-        taLog.setRows(5);
-        jScrollPane4.setViewportView(taLog);
-
-        bCloseLog.setText("Cerrar");
-        bCloseLog.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bCloseLogMouseClicked(evt);
-            }
-        });
+        jpLog.setBackground(new java.awt.Color(0, 50, 120));
 
         bSaveLog.setText("Guardar");
         bSaveLog.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -892,35 +923,54 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        bCloseLog.setText("Cerrar");
+        bCloseLog.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bCloseLogMouseClicked(evt);
+            }
+        });
+
+        tpLog.setEditable(false);
+        jScrollPane6.setViewportView(tpLog);
+
+        javax.swing.GroupLayout jpLogLayout = new javax.swing.GroupLayout(jpLog);
+        jpLog.setLayout(jpLogLayout);
+        jpLogLayout.setHorizontalGroup(
+            jpLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpLogLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpLogLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jpLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bSaveLog, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpLogLayout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(bCloseLog, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(378, 378, 378))
+        );
+        jpLogLayout.setVerticalGroup(
+            jpLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpLogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bSaveLog, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bCloseLog, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7))
+        );
+
         javax.swing.GroupLayout jdLogLayout = new javax.swing.GroupLayout(jdLog.getContentPane());
         jdLog.getContentPane().setLayout(jdLogLayout);
         jdLogLayout.setHorizontalGroup(
             jdLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdLogLayout.createSequentialGroup()
-                .addGroup(jdLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jdLogLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane4))
-                    .addGroup(jdLogLayout.createSequentialGroup()
-                        .addGap(333, 333, 333)
-                        .addComponent(bCloseLog, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(jdLogLayout.createSequentialGroup()
-                .addGap(303, 303, 303)
-                .addComponent(bSaveLog, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(410, Short.MAX_VALUE))
+            .addComponent(jpLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jdLogLayout.setVerticalGroup(
             jdLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jdLogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bSaveLog, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bCloseLog, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
+            .addComponent(jpLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jdReport.setTitle("Reporte de sus archivos");
@@ -1062,6 +1112,14 @@ public class main extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 51, 153));
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+        jPanel8.setForeground(new java.awt.Color(0, 0, 102));
+
+        jlTitle.setFont(new java.awt.Font("NSimSun", 3, 24)); // NOI18N
+        jlTitle.setForeground(new java.awt.Color(255, 0, 51));
+        jlTitle.setText("Sunny Files");
 
         bLogin.setText("Log in");
         bLogin.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1082,25 +1140,50 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addComponent(jlTitle)
+                                .addGap(21, 21, 21))))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addComponent(bExit, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(112, 112, 112)
+                        .addComponent(jlFrameIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(89, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jlTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(jlFrameIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(bLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(bExit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(163, 163, 163)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                    .addComponent(bExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(160, Short.MAX_VALUE))
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(bLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
-                .addComponent(bExit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(93, 93, 93))
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -1109,6 +1192,7 @@ public class main extends javax.swing.JFrame {
     private void bLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bLoginMouseClicked
         tfUser.setText("");
         pwfPass.setText("");
+        jdLogin.setIconImage((new ImageIcon("./sol.png").getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
         jdLogin.pack();
         jdLogin.setLocationRelativeTo(this);
         jdLogin.setModal(true);
@@ -1446,22 +1530,56 @@ public class main extends javax.swing.JFrame {
             Connect();
             tpText.setEditable(true);
             TextSize = 12;
-
+            jlTextSize.setText(12 + "");
             curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
-            System.out.println(curr.toString());
             tpText.setText(curr.getText());
-            db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'usuario " + principal.getUsername() + " ID " + principal.getId() + " abrio el archivo " + curr.getName() + " ID " + curr.getID() + "')");
-            ResultSet getPermit = db.executeQuery("select Type from permissions where FileID=" + curr.getID());
-            if (getPermit.next()) {
-
-                if (getPermit.getInt(1) == 1) {
-                    tpText.setEditable(false);
-                } else {
-                    tpText.setEditable(true);
-                }
+            if (jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Tus Archivos")) {
+                tpText.setEditable(true);
+                bBold.setEnabled(true);
+                bST.setEnabled(true);
+                bUnderline.setEnabled(true);
+                bItalic.setEnabled(true);
+                bReduceSize.setEnabled(true);
+                bIncreaseSize.setEnabled(true);
+                bAlignLeft.setEnabled(true);
+                bAlignCenter.setEnabled(true);
+                bAlignRight.setEnabled(true);
+                bSave.setEnabled(true);
+                db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'usuario " + principal.getUsername() + " ID " + principal.getId() + " abrio el archivo " + curr.getName() + " ID " + curr.getID() + "')");
             } else {
-                System.out.println("nope");
-                tpText.setEditable(false);
+                db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'usuario " + principal.getUsername() + " ID " + principal.getId() + " abrio el archivo " + curr.getName() + " ID " + curr.getID() + "')");
+                ResultSet getPermit = db.executeQuery("select Type from permissions where FileID=" + curr.getID());
+                if (getPermit.next()) {
+
+                    if (getPermit.getInt(1) == 1) {
+                        tpText.setEditable(false);
+                        bBold.setEnabled(false);
+                        bST.setEnabled(false);
+                        bUnderline.setEnabled(false);
+                        bItalic.setEnabled(false);
+                        bReduceSize.setEnabled(false);
+                        bIncreaseSize.setEnabled(false);
+                        bAlignLeft.setEnabled(false);
+                        bAlignCenter.setEnabled(false);
+                        bAlignRight.setEnabled(false);
+                        bSave.setEnabled(false);
+                    } else {
+                        tpText.setEditable(true);
+                        bBold.setEnabled(true);
+                        bST.setEnabled(true);
+                        bUnderline.setEnabled(true);
+                        bItalic.setEnabled(true);
+                        bReduceSize.setEnabled(true);
+                        bIncreaseSize.setEnabled(true);
+                        bAlignLeft.setEnabled(true);
+                        bAlignCenter.setEnabled(true);
+                        bAlignRight.setEnabled(true);
+                        bSave.setEnabled(true);
+                    }
+                } else {
+                    System.out.println("nope");
+                    tpText.setEditable(false);
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(jdMain, "Ocurrio un error");
@@ -1585,17 +1703,19 @@ public class main extends javax.swing.JFrame {
     private void bExportfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bExportfileMouseClicked
         try {
             Connect();
-            if (rbDoc.isSelected()) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.setDialogTitle("Elija el directorio a donde exportar");
-                chooser.setAcceptAllFileFilterUsed(false);
-
-                int op = chooser.showOpenDialog(jdExport);
-                if (op == JFileChooser.APPROVE_OPTION) {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setDialogTitle("Elija el directorio a donde exportar");
+            chooser.setAcceptAllFileFilterUsed(false);
+            int op = chooser.showOpenDialog(jdExport);
+            if (op == JFileChooser.APPROVE_OPTION) {
+                File dir = chooser.getSelectedFile();
+                String name = Chosen.getName();
+                if (name.contains(".")) {
+                    name = name.substring(0, Chosen.getName().indexOf("."));
+                }
+                if (rbDoc.isSelected()) {
                     try {
-                        File dir = chooser.getSelectedFile();
-                        String name = Chosen.getName().substring(0, Chosen.getName().indexOf("."));
                         FileWriter fos = new FileWriter(new File(dir.getPath() + "\\" + name + ".doc"));
                         BufferedWriter bos = new BufferedWriter(fos);
                         bos.write(Chosen.getText());
@@ -1608,39 +1728,60 @@ public class main extends javax.swing.JFrame {
                         }
                     } catch (IOException e) {
                         JOptionPane.showMessageDialog(jdExport, "Ocurrio un error exportando el documento.\nVerifique el directorio por el archivo");
+                        e.printStackTrace();
                     }
-                }
-            } else if (rbDocx.isSelected()) {
-
-            } else if (rbRTF.isSelected()) {
-
-            } else if (rbXML.isSelected()) {
-                try {
-                    JFileChooser chooser = new JFileChooser();
-                    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    chooser.setDialogTitle("Elija el directorio a donde exportar");
-                    chooser.setAcceptAllFileFilterUsed(false);
-
-                    int op = chooser.showOpenDialog(jdExport);
-                    if (op == JFileChooser.APPROVE_OPTION) {
+                } else if (rbDocx.isSelected()) {
+                    XWPFDocument docu = new XWPFDocument();
+                    XWPFParagraph p = docu.createParagraph();
+                    XWPFRun run = p.createRun();
+                    run.setText(Chosen.getText());
+                    try {
+                        FileOutputStream fos = new FileOutputStream(new File(dir.getAbsolutePath() + "\\" + name + ".docx"));
+                        docu.write(fos);
+                        try {
+                            db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " exportó el archivo " + Chosen.getName() + " ID " + Chosen.getID() + " a Docx')");
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        fos.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else if (rbRTF.isSelected()) {
+                    XWPFDocument docu = new XWPFDocument();
+                    XWPFParagraph p = docu.createParagraph();
+                    XWPFRun run = p.createRun();
+                    run.setText(Chosen.getText());
+                    try {
+                        FileOutputStream fos = new FileOutputStream(new File(dir.getAbsolutePath() + "\\" + name + ".rtf"));
+                        docu.write(fos);
+                        fos.close();
+                        JOptionPane.showMessageDialog(jdExport, "Archivo exportado con excito");
+                        try {
+                            db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " exportó el archivo " + Chosen.getName() + " ID " + Chosen.getID() + " a RTF')");
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (rbXML.isSelected()) {
+                    try {
                         File file = chooser.getSelectedFile();
-                        String name = Chosen.getName().substring(0, Chosen.getName().indexOf("."));
-
                         JAXBContext context = JAXBContext.newInstance(FileClass.class);
                         Marshaller m = context.createMarshaller();
                         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                        m.marshal(Chosen, new File(file.getAbsolutePath() + "/" + name + ".xml"));
+                        m.marshal(Chosen, new File(file.getAbsolutePath() + "\\" + name + ".xml"));
                         try {
                             db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " exportó el archivo " + Chosen.getName() + " ID " + Chosen.getID() + " a XML')");
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(jdExport, "Ocurrio un error escribiendo a la base de datos");
                         }
+                    } catch (JAXBException e) {
+                        JOptionPane.showMessageDialog(jdExport, "Ocurrio un error exportando el documento.\nVerifique el directorio por el archivo");
                     }
-                } catch (JAXBException e) {
-                    JOptionPane.showMessageDialog(jdExport, "Ocurrio un error exportando el documento.\nVerifique el directorio por el archivo");
                 }
             }
-
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(jdExport, "Ocurrio un error");
             ex.printStackTrace();
@@ -1658,7 +1799,6 @@ public class main extends javax.swing.JFrame {
         rbDoc.setSelected(false);
         rbDocx.setSelected(false);
         Chosen = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
-
         taExport.setText(Chosen.toString());
         jlName.setText(Chosen.getName());
         jdExport.setVisible(true);
@@ -1726,14 +1866,18 @@ public class main extends javax.swing.JFrame {
     private void jmiLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLogActionPerformed
         try {
             Connect();
-            taLog.setText("");
+            tpLog.setText("");
             ResultSet GetLog = db.executeQuery("select Date,Time,Action from log");
+            
             if (GetLog.next()) {
-                taLog.append(GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
+                String logs="";
+                logs+=(GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
                 while (GetLog.next()) {
-                    taLog.append(GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
+                    logs+=(GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
 
                 }
+                jdLog.setBackground(new Color(0,50,102));
+                tpLog.setText(logs);
                 jdLog.pack();
                 jdLog.setLocationRelativeTo(jdMain);
                 jdLog.setModal(true);
@@ -1768,9 +1912,10 @@ public class main extends javax.swing.JFrame {
                 }
                 FileWriter fw = new FileWriter(destino);
                 BufferedWriter bw = new BufferedWriter(fw);
-                String[] logs = taLog.getText().split("\n");
+                String[] logs = tpLog.getText().split("\n");
                 for (int i = 0; i < logs.length; i++) {
-                    bw.write(logs[i] + "\n");
+                    bw.write(logs[i]);
+                    bw.newLine();
                 }
                 bw.close();
                 fw.close();
@@ -1845,7 +1990,6 @@ public class main extends javax.swing.JFrame {
                 }
                 query += order;
                 Connect();
-                System.out.println(query);
                 ResultSet GetFiles = db.executeQuery(query);
                 DefaultTableModel model = (DefaultTableModel) jtReport.getModel();
                 while (GetFiles.next()) {
@@ -1859,6 +2003,10 @@ public class main extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_bGenerateReportMouseClicked
+
+    private void rbRTFMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbRTFMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbRTFMouseClicked
 
     public void Connect() {
         try {
@@ -2026,6 +2174,7 @@ public class main extends javax.swing.JFrame {
 
                         jdLogin.dispose();
                         this.setVisible(false);
+                        jlIcon.setIcon(new ImageIcon(new ImageIcon("./sol.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)));
                         bBold.setSize(60, 50);
                         bBold.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/bold.png").getImage().getScaledInstance(50, 40, Image.SCALE_SMOOTH)));
                         bItalic.setSize(60, 50);
@@ -2092,19 +2241,35 @@ public class main extends javax.swing.JFrame {
                         jdMain.setVisible(true);
                     } else if (usuario.getInt("connected") == 1) {
                         JOptionPane.showMessageDialog(jdLogin, "Ese usuario ya esta conectado");
+                        pwfPass.setFocusable(false);
+                        pwfPass.setFocusable(true);
+                        tfUser.setFocusable(false);
+                        tfUser.setFocusable(true);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Usuario no encontrado, revise sus credenciales");
+                    JOptionPane.showMessageDialog(jdLogin, "Usuario no encontrado, revise sus credenciales");
                     principal = null;
+                    pwfPass.setFocusable(false);
+                    pwfPass.setFocusable(true);
+                    tfUser.setFocusable(false);
+                    tfUser.setFocusable(true);
                 }
             } else {
                 JOptionPane.showMessageDialog(jdLogin, "Usuario y/o contraseña no pueden ser vacios");
                 tfUser.setText("");
                 pwfPass.setText("");
+                pwfPass.setFocusable(false);
+                pwfPass.setFocusable(true);
+                tfUser.setFocusable(false);
+                tfUser.setFocusable(true);
             }
         } catch (InputMismatchException | SQLException e) {
             JOptionPane.showMessageDialog(jdLogin, "Usuario no encontrado. Verifique sus credenciales e intente de nuevo");
             e.printStackTrace();
+            pwfPass.setFocusable(false);
+            pwfPass.setFocusable(true);
+            tfUser.setFocusable(false);
+            tfUser.setFocusable(true);
         } finally {
             Close();
         }
@@ -2175,20 +2340,24 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JDialog jdExport;
     private javax.swing.JDialog jdLog;
     private javax.swing.JDialog jdLogin;
     private javax.swing.JDialog jdMain;
     private javax.swing.JDialog jdPermisos;
     private javax.swing.JDialog jdReport;
+    private javax.swing.JLabel jlFrameIcon;
+    private javax.swing.JLabel jlIcon;
     private javax.swing.JLabel jlLogo;
     private javax.swing.JLabel jlName;
     private javax.swing.JLabel jlTextSize;
+    private javax.swing.JLabel jlTitle;
     private javax.swing.JMenu jmFile;
     private javax.swing.JMenu jmLogout;
     private javax.swing.JMenu jmOptions;
@@ -2200,6 +2369,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiOpenFile;
     private javax.swing.JMenuItem jmiPermiso;
     private javax.swing.JMenuItem jmiReports;
+    private javax.swing.JPanel jpLog;
     private javax.swing.JPanel jpMain;
     private javax.swing.JPanel jpReport;
     private javax.swing.JPopupMenu jpmAdminFiles;
@@ -2218,9 +2388,9 @@ public class main extends javax.swing.JFrame {
     private javax.swing.ButtonGroup rbgExport;
     private javax.swing.ButtonGroup rbgReport;
     private javax.swing.JTextArea taExport;
-    private javax.swing.JTextArea taLog;
     private javax.swing.JTextField tfPermisosFileName;
     private javax.swing.JTextField tfUser;
+    private javax.swing.JTextPane tpLog;
     private javax.swing.JTextPane tpText;
     // End of variables declaration//GEN-END:variables
 }
