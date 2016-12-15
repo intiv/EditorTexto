@@ -27,7 +27,7 @@ public class FileClass {
     //private byte[][] sections;
     private String text;
     private ArrayList<Block> blocks;
-    
+
     public FileClass() {
         ID = -1;
         name = "";
@@ -42,19 +42,20 @@ public class FileClass {
         //this.sections = sections;
     }
 
-    public FileClass(int ID, String name,/* String text, */ArrayList<Block> blocks) {
+    public FileClass(int ID, String name,/* String text, */ ArrayList<Block> blocks) {
         this.ID = ID;
         this.name = name;
         //this.text = text;
-        this.blocks=blocks;
+        this.blocks = blocks;
         //this.sections = sections;
     }
-    public FileClass(String name,ArrayList<Block> blocks){
-        this.name=name;
-        this.blocks=blocks;
-        this.ID=-1;
+
+    public FileClass(String name, ArrayList<Block> blocks) {
+        this.name = name;
+        this.blocks = blocks;
+        this.ID = -1;
     }
-    
+
     @XmlElement
     public int getID() {
         return ID;
@@ -78,10 +79,10 @@ public class FileClass {
         return "FileClass{" + "ID=" + ID + ", name=" + name + ", sections="/* + Arrays.deepToString(sections) */ + '}';
     }
 
-    public  String toString(int x){
-        return "FileClass{ ID="+ID+", name = "+name+", Blocks: \n"+blocks.toString()+"}";
+    public String toString(int x) {
+        return "FileClass{ ID=" + ID + ", name = " + name + ", Blocks: \n" + blocks.toString() + "}";
     }
-    
+
     public String Serialize() {
         try {
             StringWriter sw = new StringWriter();
@@ -109,6 +110,21 @@ public class FileClass {
     @XmlElement
     public String getText() {
         return text;
+    }
+
+    public String getBlocksText() {
+        if (blocks != null) {
+            if (blocks.size() > 0) {
+                String retVal = " ";
+                for (int i = 0; i < blocks.size(); i++) {
+                    retVal+=blocks.get(i).getText();
+                }
+                return retVal;
+            }else
+                return "";
+        } else {
+            return "";
+        }
     }
 
     public void setText(String text) {

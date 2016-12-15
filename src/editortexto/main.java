@@ -42,7 +42,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStream;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -57,10 +56,6 @@ import javax.xml.bind.Marshaller;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.XMLOutputter;
 import org.jsoup.Jsoup;
 
 /*
@@ -107,7 +102,7 @@ public class main extends javax.swing.JFrame {
         OriginalTable = (DefaultTableModel) jtReport.getModel();
         tpText.setText("");
         this.setLocationRelativeTo(null);
-        jlFrameIcon.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/sol.png").getImage().getScaledInstance(200, 180, Image.SCALE_SMOOTH)));
+        jlIcon.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/sol.png").getImage().getScaledInstance(200, 180, Image.SCALE_SMOOTH)));
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
             db = con.createStatement();
@@ -124,20 +119,22 @@ public class main extends javax.swing.JFrame {
             e.printStackTrace();
         }
         jlTextSize.setText(TextSize + "");
-        jdMain.addWindowListener(new WindowAdapter(){
+        /*jdMain.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        jdMain.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosed(WindowEvent e){
+            public void windowClosed(WindowEvent e) {
+                
                 Connect();
                 try {
-                    db.executeQuery("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario "+principal.getUsername()+" ID "+principal.getId()+" salio del sistema')");
-                    db.executeQuery("update users set connected=0 where ID="+principal.getId()+" limit 1");
+                    db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " ID " + principal.getId() + " salio del sistema')");
+                    db.executeUpdate("update users set connected=0 where ID=" + principal.getId() + " limit 1");
                 } catch (SQLException ex) {
                     Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 Close();
                 System.exit(0);
             }
-        });
+        });*/
     }
 
     @SuppressWarnings("unchecked")
@@ -172,7 +169,6 @@ public class main extends javax.swing.JFrame {
         bSave = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tpText = new javax.swing.JTextPane();
-        jlLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtAdmin = new javax.swing.JTree();
         jPanel7 = new javax.swing.JPanel();
@@ -328,7 +324,7 @@ public class main extends javax.swing.JFrame {
         jdMain.setBackground(new java.awt.Color(51, 51, 255));
         jdMain.setResizable(false);
 
-        jpMain.setBackground(new java.awt.Color(0, 0, 80));
+        jpMain.setBackground(new java.awt.Color(0, 0, 125));
         jpMain.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 153)));
 
         jtpEditorOptions.setBackground(new java.awt.Color(102, 102, 102));
@@ -542,18 +538,15 @@ public class main extends javax.swing.JFrame {
         tpText.setBackground(new java.awt.Color(245, 245, 245));
         tpText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
         tpText.setContentType("text/html"); // NOI18N
-        tpText.setText("<html>\r\n  <head>\r\n\r\n  </head>\r\n  <body>\r\n    <p>\r\n      \r\n    </p>\r\n  </body>\r\n</html>\r\n"); // NOI18N
+        tpText.setText("<html>\r\n  <head>\r\n\r\n  </head>\r\n  <body>\r\n    <p>\r\n    </p>\r\n  </body>\r\n</html>\r\n"); // NOI18N
         tpText.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tpTextMouseClicked(evt);
             }
         });
         tpText.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tpTextKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tpTextKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tpTextKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(tpText);
@@ -632,15 +625,11 @@ public class main extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMainLayout.createSequentialGroup()
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpMainLayout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jlLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMainLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jpMainLayout.createSequentialGroup()
-                            .addGap(27, 27, 27)
-                            .addComponent(jlIcon))))
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpMainLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jlIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jpMainLayout.createSequentialGroup()
@@ -655,17 +644,15 @@ public class main extends javax.swing.JFrame {
             .addGroup(jpMainLayout.createSequentialGroup()
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpMainLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jlIcon)
-                        .addGap(52, 52, 52)
-                        .addComponent(jlLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMainLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jtpEditorOptions)
                             .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jpMainLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jlIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1336,26 +1323,6 @@ public class main extends javax.swing.JFrame {
             chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt", "xml", "docx", "doc", "rtf"));
             chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int op = chooser.showOpenDialog(jdMain);
-
-            String xmlizado = asd.Serialize();
-            System.out.println(xmlizado);
-            System.out.println("=============================================================");
-            FileClass kek = asd.Deserialize(xmlizado);
-            System.out.println(kek.toString(1));
-            SAXBuilder builda = new SAXBuilder();
-            System.out.println("===============================================================");
-            org.jdom2.Document documentw = builda.build(new StringReader(xmlizado));
-            List lista = documentw.getRootElement().getChildren("blocks");
-            for (int i = 0; i < lista.size(); i++) {
-                System.out.println(((Element) lista.get(i)).getChildText("rowa"));
-                System.out.println(((Element) lista.get(i)).getChildText("modifying"));
-                System.out.println(((Element) lista.get(i)).getChildText("user"));
-                System.out.println(((Element) lista.get(i)).getChildText("text"));
-
-                System.out.println("------------------------------------------------------");
-            }
-            XMLOutputter xmlers = new XMLOutputter();
-            //xmler.output(document, System.out);
             if (op == JFileChooser.APPROVE_OPTION) {
                 CurrentFile = chooser.getSelectedFile();
                 if (CurrentFile.getName().endsWith(".doc") || CurrentFile.getName().endsWith(".txt")) {
@@ -1390,15 +1357,22 @@ public class main extends javax.swing.JFrame {
                     BufferedReader br = new BufferedReader(fr);
                     String line;
                     String xml = "";
+                    ArrayList<Block> bloques = new ArrayList();
+                    int cont = 0;
                     while ((line = br.readLine()) != null) {
                         xml += line;
-                        System.out.println(line);
+                        bloques.add(new Block(cont, false, line, -1));
                     }
                     System.out.println("\n" + xml);
                     FileClass des = new FileClass();
                     FileClass lel = des.Deserialize(xml);
+                    lel.setBlocks(bloques);
                     curr = lel;
-                    tpText.setText(curr.getBlocks().toString());
+                    if (curr.getBlocks().size() > 0) {
+                        tpText.setText(curr.getBlocksText());
+                    } else {
+                        tpText.setText("");
+                    }
 
                 } else if (CurrentFile.getName().endsWith(".docx") || CurrentFile.getName().endsWith(".rtf")) {
                     try {
@@ -1417,7 +1391,7 @@ public class main extends javax.swing.JFrame {
                         }
                         curr = new FileClass(CurrentFile.getName().substring(0, CurrentFile.getName().lastIndexOf(".")), bloques);
                         System.out.println(curr.toString(1));
-                        tpText.setText(x);
+                        tpText.setText(curr.getBlocksText());
                         fis.close();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1426,8 +1400,6 @@ public class main extends javax.swing.JFrame {
             }
         } catch (NullPointerException | IOException | BadLocationException | SQLException e) {
             e.printStackTrace();
-        } catch (JDOMException ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             Close();
         }
@@ -1608,7 +1580,6 @@ public class main extends javax.swing.JFrame {
             if (jdPermisos.isVisible()) {
                 jdPermisos.dispose();
             }
-            principal = null;
             jdMain.dispose();
             tfUser.setText("");
             pwfPass.setText("");
@@ -1630,7 +1601,13 @@ public class main extends javax.swing.JFrame {
             TextSize = 12;
             jlTextSize.setText(12 + "");
             curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
-            tpText.setText(curr.getText());
+            String[] lines = curr.getText().split("\n");
+            ArrayList<Block> bloques = new ArrayList();
+            for (int i = 0; i < lines.length; i++) {
+                bloques.add(new Block(i, false, lines[i], -1));
+            }
+            curr.setBlocks(bloques);
+            tpText.setText(curr.getBlocksText());
             if (jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Tus Archivos")) {
                 tpText.setEditable(true);
                 bBold.setEnabled(true);
@@ -1715,75 +1692,19 @@ public class main extends javax.swing.JFrame {
                 }
             }
 
-        } else {
-            try {
-                int row = RowNum();
-                Document doc = tpText.getDocument();
-                String[] texto = doc.getText(0, doc.getLength()).split("\n");
-                Block[] bloques = new Block[texto.length];
-                for (int i = 0; i < texto.length; i++) {
-                    bloques[i] = new Block(i, false, texto[i], 3);
-                }
-                bloques[3].setModifying(true);
-                bloques[5].setModifying(true);
-                if (bloques[row].isModifying()) {
+        } else if (curr != null && tpText.isEditable()) {
+            int row = RowNum();
+            if (curr.getBlocks().get(row).isModifying()) {
+                if (curr.getBlocks().get(row).getUser() != principal.getId()) {
                     JOptionPane.showMessageDialog(jdMain, "Bloqueado");
                     tpText.setFocusable(false);
                     tpText.setFocusable(true);
+                } else {
+                    OriginalRow = row;
                 }
-            } catch (BadLocationException ex) {
-                Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_tpTextMouseClicked
-
-    private void tpTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tpTextKeyPressed
-        /*try {
-            String[] lines = tpText.getDocument().getText(0, tpText.getDocument().getLength()).split("\n");
-            System.out.println(Arrays.toString(lines));
-            if (KeyEvent.VK_ENTER != evt.getKeyCode()) {
-
-                int row = RowNum();
-                if (Arrays.toString(lines).equals(Arrays.toString(lines))) {
-                    blocks.add(new Block(0, true, ""));
-                }
-                blocks.get(row).setText(lines[row]);
-
-            } else {
-                int row = RowNum();
-                System.out.println("ROW TYPED: " + row);
-                System.out.println(lines.length);
-                if (row == lines.length) {
-                    blocks.add(new Block(row, true, ""));
-                    blocks.get(row - 1).setModifiying(false);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-    }//GEN-LAST:event_tpTextKeyPressed
-
-    private void tpTextKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tpTextKeyTyped
-        /*try {
-            String[] t = tpText.getDocument().getText(0, tpText.getDocument().getLength()).split("\n");
-            int row = RowNum();
-            System.out.println("T: " + t.length);
-            if (t[row].equals("")) {
-                blocks.add(new Block(row, true, ""));
-            }else if(KeyEvent.VK_ENTER==evt.getKeyCode()){
-                int row=RowNum();
-                System.out.println("ROW TYPED: "+row);
-                if(row>t.split("\n").length){
-                    System.out.println("fugg naw");
-                    blocks.add(new Block(row,true,""));
-                    blocks.get(row-1).setModifiying(false);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-    }//GEN-LAST:event_tpTextKeyTyped
 
     private void bExportfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bExportfileMouseClicked
         try {
@@ -2102,6 +2023,99 @@ public class main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmiRefreshActionPerformed
 
+    private void tpTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tpTextKeyReleased
+        if (tpText.isEditable()) {
+            if ((evt.getKeyCode() > 64 && evt.getKeyCode() < 91) || (evt.getKeyCode() > 96 && evt.getKeyCode() < 123) || evt.getKeyCode() == 8) {
+                try {
+                    System.out.println("TECLA");
+                    int row = RowNum();
+                    //System.out.println(tpText.getDocument().getText(0, tpText.getDocument().getLength()));
+                    String[] lineas = tpText.getDocument().getText(0, tpText.getDocument().getLength()).split("\n");
+
+                    System.out.println(lineas.length);
+                    for (int i = 0; i < lineas.length; i++) {
+                        System.out.println(lineas[i]);
+                    }
+                    System.out.println("--------------------------------");
+                    if (row >= curr.getBlocks().size()) {
+                        curr.getBlocks().add(new Block(row, true, lineas[row], principal.getId()));
+                    } else {
+                        curr.getBlocks().get(row).setText(lineas[row]);
+                        curr.getBlocks().get(row).setModifying(true);
+                        curr.getBlocks().get(row).setUser(principal.getId());
+                    }
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                try {
+
+                    int row = RowNum();
+                    tpText.getDocument().insertString(tpText.getDocument().getLength(), " ", tpText.getCharacterAttributes());
+                    curr.getBlocks().get(row - 1).setModifying(false);
+                    OriginalRow = row;
+                    Block nuevo = new Block(row, true, " ", principal.getId());
+                    curr.getBlocks().add(nuevo);
+                    Connect();
+                    try {
+                        db.executeUpdate("insert into blocks(UserID,Text,row,FileID) values(" + principal.getId() + ",' '," + row + "," + curr.getID() + ")");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    Close();
+                    /*
+                        System.out.println("ENTER");
+                        System.out.println(tpText.getDocument().getText(0, tpText.getDocument().getLength()));
+                        System.out.println("===============================");
+                        String[] lineas = tpText.getDocument().getText(0, tpText.getDocument().getLength()).split("\n");
+                        if (lineas.length > 0) {
+                        String[] temp = new String[lineas.length - 1];
+                        boolean changed = false;
+                        if (lineas[0].equals("")) {
+                        System.err.println("hehexd");
+                        int count = 0;
+                        for (int i = 1; i < lineas.length; i++) {
+                        temp[count] = lineas[i];
+                        count++;
+                        }
+                        changed = true;
+                        for (int i = 0; i < temp.length; i++) {
+                        System.out.println("temp[i]: " + temp[i]);
+                        }
+                        }
+                        if (!changed) {
+                        System.out.println(lineas.length);
+                        for (int i = 0; i < lineas.length; i++) {
+                        System.out.print(lineas[i]);
+                        
+                        if (lineas[i].equals("")) {
+                        System.out.println(" AWILSON LO DETECTA");
+                        }
+                        }
+                        } else {
+                        System.out.println(temp.length);
+                        for (int i = 0; i < temp.length; i++) {
+                        System.out.print(temp[i]);
+                        
+                        if (temp[i].equals("")) {
+                        System.out.println(" AWILSON LO DETECTA");
+                        }
+                        }
+                        
+                        }
+                        System.out.println("\n--------------------------------");
+                        for (int i = row; i < curr.getBlocks().size(); i++) {
+
+                        }
+                        }*/
+
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_tpTextKeyReleased
+
     public void Connect() {
         try {
             if (con.isClosed()) {
@@ -2332,7 +2346,7 @@ public class main extends javax.swing.JFrame {
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(jdMain, "Ocurrio un error obteniendo sus archivos de la base de datos. Use la opcion 'Actualizar' del arbol");
                         }
-                        jdMain.pack();  
+                        jdMain.pack();
                         jdMain.setLocationRelativeTo(this);
                         jdMain.setModal(true);
                         jdMain.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -2452,7 +2466,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JDialog jdReport;
     private javax.swing.JLabel jlFrameIcon;
     private javax.swing.JLabel jlIcon;
-    private javax.swing.JLabel jlLogo;
     private javax.swing.JLabel jlName;
     private javax.swing.JLabel jlTextSize;
     private javax.swing.JLabel jlTitle;

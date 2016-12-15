@@ -33,6 +33,14 @@ public class Block {
         return text;
     }
 
+    public void IncreaseRow(){
+        row++;
+    }
+    
+    public void DecreaseRow(){
+        if(row>0)
+            row--;
+    }
     public void setText(String text) {
         this.text = text;
     }
@@ -50,6 +58,8 @@ public class Block {
     }
 
     public void setModifying(boolean modifying) {
+        if(modifying==false)
+            user=-1;
         this.modifying = modifying;
     }
 

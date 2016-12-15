@@ -13,16 +13,18 @@ public class UpdateText extends Thread {
     JTree tree;
     Connection con;
     int id;
+    FileClass curr;
     
-    
-    public UpdateText(JTextPane text, JTree tree, Connection con, int id) {
+    public UpdateText(JTextPane text, JTree tree, Connection con,FileClass curr, int id) {
         this.text = text;
         this.run = true;
         this.tree = tree;
         this.con = con;
         this.id = id;
+        this.curr=curr;
     }
 
+    
     @Override
     public void run() {
         try {
