@@ -2,6 +2,7 @@ package editortexto;
 
 import com.sun.glass.events.KeyEvent;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
+
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,16 +35,19 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Utilities;
 import javax.swing.text.html.HTML;
@@ -53,6 +57,10 @@ import javax.xml.bind.Marshaller;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
 import org.jsoup.Jsoup;
 
 /*
@@ -82,20 +90,24 @@ public class main extends javax.swing.JFrame {
     FileClass Chosen = null;
     DefaultTreeModel original = null;
     int TextSize = 12;
-    ArrayList<Block> blocks = null;
+    //ArrayList<Block> blocks = null;
     DefaultTableModel OriginalTable = null;
+    FileClass asd;
+    int OriginalRow;
 
     public main() {
         initComponents();
-        blocks = new ArrayList();
+        ArrayList<Block> blocks = new ArrayList();
+        blocks.add(new Block(0, false, "Adios", 3));
+        blocks.add(new Block(1, false, "jaja", 3));
+        blocks.add(new Block(2, false, "que?", 3));
+        blocks.add(new Block(3, false, "awilson", 3));
+        blocks.add(new Block(4, false, "neles pasteles", 3));
+        asd = new FileClass(1, "Hola.txt", blocks);
         OriginalTable = (DefaultTableModel) jtReport.getModel();
         tpText.setText("");
         this.setLocationRelativeTo(null);
         jlFrameIcon.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/sol.png").getImage().getScaledInstance(200, 180, Image.SCALE_SMOOTH)));
-        
-        
-        
-        
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
             db = con.createStatement();
@@ -112,6 +124,20 @@ public class main extends javax.swing.JFrame {
             e.printStackTrace();
         }
         jlTextSize.setText(TextSize + "");
+        jdMain.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e){
+                Connect();
+                try {
+                    db.executeQuery("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario "+principal.getUsername()+" ID "+principal.getId()+" salio del sistema')");
+                    db.executeQuery("update users set connected=0 where ID="+principal.getId()+" limit 1");
+                } catch (SQLException ex) {
+                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Close();
+                System.exit(0);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -167,6 +193,7 @@ public class main extends javax.swing.JFrame {
         jmiPermiso = new javax.swing.JMenuItem();
         jmiDelete = new javax.swing.JMenuItem();
         jmiExport = new javax.swing.JMenuItem();
+        jmiRefresh = new javax.swing.JMenuItem();
         jdPermisos = new javax.swing.JDialog();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -214,9 +241,7 @@ public class main extends javax.swing.JFrame {
 
         jdLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jdLogin.setTitle("Bienvenido a Sun Files!");
-        jdLogin.setMaximumSize(null);
         jdLogin.setMinimumSize(null);
-        jdLogin.setPreferredSize(new java.awt.Dimension(590, 300));
         jdLogin.setResizable(false);
 
         jPanel5.setBackground(new java.awt.Color(51, 51, 180));
@@ -406,9 +431,9 @@ public class main extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bUnderline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bUnderline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(bReduceSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -639,7 +664,7 @@ public class main extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jtpEditorOptions)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -728,6 +753,14 @@ public class main extends javax.swing.JFrame {
             }
         });
         jpmAdminFiles.add(jmiExport);
+
+        jmiRefresh.setText("jMenuItem1");
+        jmiRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiRefreshActionPerformed(evt);
+            }
+        });
+        jpmAdminFiles.add(jmiRefresh);
 
         jdPermisos.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jdPermisos.setTitle("Asignar permiso");
@@ -1300,36 +1333,101 @@ public class main extends javax.swing.JFrame {
         try {
             Connect();
             JFileChooser chooser = new JFileChooser("Open File");
-            chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt", "xml"));
+            chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt", "xml", "docx", "doc", "rtf"));
             chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int op = chooser.showOpenDialog(jdMain);
+
+            String xmlizado = asd.Serialize();
+            System.out.println(xmlizado);
+            System.out.println("=============================================================");
+            FileClass kek = asd.Deserialize(xmlizado);
+            System.out.println(kek.toString(1));
+            SAXBuilder builda = new SAXBuilder();
+            System.out.println("===============================================================");
+            org.jdom2.Document documentw = builda.build(new StringReader(xmlizado));
+            List lista = documentw.getRootElement().getChildren("blocks");
+            for (int i = 0; i < lista.size(); i++) {
+                System.out.println(((Element) lista.get(i)).getChildText("rowa"));
+                System.out.println(((Element) lista.get(i)).getChildText("modifying"));
+                System.out.println(((Element) lista.get(i)).getChildText("user"));
+                System.out.println(((Element) lista.get(i)).getChildText("text"));
+
+                System.out.println("------------------------------------------------------");
+            }
+            XMLOutputter xmlers = new XMLOutputter();
+            //xmler.output(document, System.out);
             if (op == JFileChooser.APPROVE_OPTION) {
                 CurrentFile = chooser.getSelectedFile();
-                try (FileReader fr = new FileReader(CurrentFile); BufferedReader br = new BufferedReader(fr)) {
-                    String Text = "";
-                    tpText.setText("");
-                    Document doc = tpText.getDocument();
+                if (CurrentFile.getName().endsWith(".doc") || CurrentFile.getName().endsWith(".txt")) {
+                    try (FileReader fr = new FileReader(CurrentFile); BufferedReader br = new BufferedReader(fr)) {
+                        String Text = "";
+                        tpText.setText("");
+                        Document doc = tpText.getDocument();
+                        String line;
+                        ArrayList<Block> bloques = new ArrayList();
+                        int row = 0;
+                        while ((line = br.readLine()) != null) {
+                            doc.insertString(doc.getLength(), line, null);
+                            Text += line + "\n";
+                            row++;
+                        }
+                        int id = -1;
+                        ResultSet HighestID = db.executeQuery("select ID from files order by ID desc limit 1");
+                        if (HighestID.next()) {
+                            id = HighestID.getInt(1);
+                        }
+                        curr = new FileClass();
+                        curr.setName(CurrentFile.getName());
+                        if (id != -1) {
+                            id += 1;
+                        }
+                        curr.setID(id);
+                        // curr.setBlocks(blocks);
+                        curr.setText(Text);
+                    }
+                } else if (CurrentFile.getName().endsWith(".xml")) {
+                    FileReader fr = new FileReader(CurrentFile);
+                    BufferedReader br = new BufferedReader(fr);
                     String line;
+                    String xml = "";
                     while ((line = br.readLine()) != null) {
-                        doc.insertString(doc.getLength(), line, null);
-                        Text += line + "\n";
+                        xml += line;
+                        System.out.println(line);
                     }
-                    int id = -1;
-                    ResultSet HighestID = db.executeQuery("select ID from files order by ID desc limit 1");
-                    if (HighestID.next()) {
-                        id = HighestID.getInt(1);
+                    System.out.println("\n" + xml);
+                    FileClass des = new FileClass();
+                    FileClass lel = des.Deserialize(xml);
+                    curr = lel;
+                    tpText.setText(curr.getBlocks().toString());
+
+                } else if (CurrentFile.getName().endsWith(".docx") || CurrentFile.getName().endsWith(".rtf")) {
+                    try {
+                        FileInputStream fis = new FileInputStream(CurrentFile);
+
+                        XWPFDocument document = new XWPFDocument(fis);
+
+                        List<XWPFParagraph> paragraphs = document.getParagraphs();
+                        String x = "";
+                        ArrayList<Block> bloques = new ArrayList();
+                        int cont = 0;
+                        for (XWPFParagraph para : paragraphs) {
+                            x += para.getText();
+                            bloques.add(new Block(cont, false, para.getText(), -1));
+                            cont++;
+                        }
+                        curr = new FileClass(CurrentFile.getName().substring(0, CurrentFile.getName().lastIndexOf(".")), bloques);
+                        System.out.println(curr.toString(1));
+                        tpText.setText(x);
+                        fis.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    curr = new FileClass();
-                    curr.setName(CurrentFile.getName());
-                    if (id != -1) {
-                        id += 1;
-                    }
-                    curr.setID(id);
-                    curr.setText(Text);
                 }
             }
         } catch (NullPointerException | IOException | BadLocationException | SQLException e) {
             e.printStackTrace();
+        } catch (JDOMException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             Close();
         }
@@ -1616,20 +1714,7 @@ public class main extends javax.swing.JFrame {
                     System.out.println("segundo: " + i + ", " + split[i]);
                 }
             }
-            System.out.println("--------------------------------------------    ");
-            for (int i = 0; i < split.length; i++) {
-                if (split[i].equals("<p>")) {
-                    String Actuelle = split[i + 1];
-                    if (Actuelle.contains("<i>") || Actuelle.contains("<b>") || Actuelle.contains("<strike>") || Actuelle.contains("<u>")) {
-                        if (Actuelle.contains("</i>") || Actuelle.contains("</b>") || Actuelle.contains("</strike>") || Actuelle.contains("</u>")) {
 
-                        } else if (split[i + 2].contains("</i>") || split[i + 2].contains("</b>") || split[i + 2].contains("</strike>") || split[i + 2].contains("</u>")) {
-
-                        }
-                    }
-                    System.out.println(lineas.get(lineas.size() - 1));
-                }
-            }
         } else {
             try {
                 int row = RowNum();
@@ -1637,11 +1722,11 @@ public class main extends javax.swing.JFrame {
                 String[] texto = doc.getText(0, doc.getLength()).split("\n");
                 Block[] bloques = new Block[texto.length];
                 for (int i = 0; i < texto.length; i++) {
-                    bloques[i] = new Block(i, false, texto[i]);
+                    bloques[i] = new Block(i, false, texto[i], 3);
                 }
-                bloques[3].setModifiying(true);
-                bloques[5].setModifiying(true);
-                if (bloques[row].isModifiying()) {
+                bloques[3].setModifying(true);
+                bloques[5].setModifying(true);
+                if (bloques[row].isModifying()) {
                     JOptionPane.showMessageDialog(jdMain, "Bloqueado");
                     tpText.setFocusable(false);
                     tpText.setFocusable(true);
@@ -1772,6 +1857,7 @@ public class main extends javax.swing.JFrame {
                         Marshaller m = context.createMarshaller();
                         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                         m.marshal(Chosen, new File(file.getAbsolutePath() + "\\" + name + ".xml"));
+                        m.marshal(asd, new File(file.getAbsolutePath() + "\\" + asd.getName() + ".xml"));
                         try {
                             db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " exportó el archivo " + Chosen.getName() + " ID " + Chosen.getID() + " a XML')");
                         } catch (SQLException e) {
@@ -1868,15 +1954,15 @@ public class main extends javax.swing.JFrame {
             Connect();
             tpLog.setText("");
             ResultSet GetLog = db.executeQuery("select Date,Time,Action from log");
-            
+
             if (GetLog.next()) {
-                String logs="";
-                logs+=(GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
+                String logs = "";
+                logs += (GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
                 while (GetLog.next()) {
-                    logs+=(GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
+                    logs += (GetLog.getDate("Date").toString() + ", " + GetLog.getTime("Time").toString() + ": " + GetLog.getString("Action") + "\n");
 
                 }
-                jdLog.setBackground(new Color(0,50,102));
+                jdLog.setBackground(new Color(0, 50, 102));
                 tpLog.setText(logs);
                 jdLog.pack();
                 jdLog.setLocationRelativeTo(jdMain);
@@ -2008,6 +2094,14 @@ public class main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rbRTFMouseClicked
 
+    private void jmiRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiRefreshActionPerformed
+        try {
+            RefreshTree();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jmiRefreshActionPerformed
+
     public void Connect() {
         try {
             if (con.isClosed()) {
@@ -2023,10 +2117,14 @@ public class main extends javax.swing.JFrame {
 
     public void Close() {
         try {
-            db.close();
-            con.close();
+            if (!db.isClosed()) {
+                db.close();
+            }
+            if (!con.isClosed()) {
+                con.close();
+            }
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -2116,9 +2214,7 @@ public class main extends javax.swing.JFrame {
         original.insertNodeInto(new DefaultMutableTreeNode("Lectura y Escritura"), (DefaultMutableTreeNode) root1.getChildAt(1), 1);
         jtAdmin.setModel(original);
         original.reload();
-        if (db == null) {
-            db = con.createStatement();
-        }
+        Connect();
         try {
             DefaultTreeModel Tmodel = (DefaultTreeModel) jtAdmin.getModel();
             DefaultMutableTreeNode root = (DefaultMutableTreeNode) Tmodel.getRoot();
@@ -2150,7 +2246,9 @@ public class main extends javax.swing.JFrame {
             Tmodel.reload(root);
             jtAdmin.setModel(Tmodel);
         } catch (SQLException e) {
-
+            JOptionPane.showMessageDialog(null, "Ocurrio un error actualizando el arbol");
+        } finally {
+            Close();
         }
     }
 
@@ -2234,7 +2332,7 @@ public class main extends javax.swing.JFrame {
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(jdMain, "Ocurrio un error obteniendo sus archivos de la base de datos. Use la opcion 'Actualizar' del arbol");
                         }
-                        jdMain.pack();
+                        jdMain.pack();  
                         jdMain.setLocationRelativeTo(this);
                         jdMain.setModal(true);
                         jdMain.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -2368,6 +2466,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiLog;
     private javax.swing.JMenuItem jmiOpenFile;
     private javax.swing.JMenuItem jmiPermiso;
+    private javax.swing.JMenuItem jmiRefresh;
     private javax.swing.JMenuItem jmiReports;
     private javax.swing.JPanel jpLog;
     private javax.swing.JPanel jpMain;

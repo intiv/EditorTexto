@@ -4,13 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 public class UpdateText extends Thread {
 
@@ -19,7 +13,8 @@ public class UpdateText extends Thread {
     JTree tree;
     Connection con;
     int id;
-
+    
+    
     public UpdateText(JTextPane text, JTree tree, Connection con, int id) {
         this.text = text;
         this.run = true;

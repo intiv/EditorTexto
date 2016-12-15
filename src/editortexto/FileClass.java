@@ -5,9 +5,9 @@
  */
 package editortexto;
 
-import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -26,7 +26,8 @@ public class FileClass {
     private String name;
     //private byte[][] sections;
     private String text;
-
+    private ArrayList<Block> blocks;
+    
     public FileClass() {
         ID = -1;
         name = "";
@@ -41,12 +42,19 @@ public class FileClass {
         //this.sections = sections;
     }
 
-    //   public byte[][] getSections() {
-    //      return sections;
-    //  }
-    // public void setSections(byte[][] sections) {
-    //     this.sections = sections;
-    // }
+    public FileClass(int ID, String name,/* String text, */ArrayList<Block> blocks) {
+        this.ID = ID;
+        this.name = name;
+        //this.text = text;
+        this.blocks=blocks;
+        //this.sections = sections;
+    }
+    public FileClass(String name,ArrayList<Block> blocks){
+        this.name=name;
+        this.blocks=blocks;
+        this.ID=-1;
+    }
+    
     @XmlElement
     public int getID() {
         return ID;
@@ -70,6 +78,10 @@ public class FileClass {
         return "FileClass{" + "ID=" + ID + ", name=" + name + ", sections="/* + Arrays.deepToString(sections) */ + '}';
     }
 
+    public  String toString(int x){
+        return "FileClass{ ID="+ID+", name = "+name+", Blocks: \n"+blocks.toString()+"}";
+    }
+    
     public String Serialize() {
         try {
             StringWriter sw = new StringWriter();
@@ -101,6 +113,15 @@ public class FileClass {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @XmlElement
+    public ArrayList<Block> getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(ArrayList<Block> blocks) {
+        this.blocks = blocks;
     }
 
 }
