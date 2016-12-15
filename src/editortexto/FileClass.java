@@ -117,7 +117,7 @@ public class FileClass {
             if (blocks.size() > 0) {
                 String retVal = " ";
                 for (int i = 0; i < blocks.size(); i++) {
-                    retVal+=blocks.get(i).getText();
+                    retVal+=blocks.get(i).getText()+"\n";
                 }
                 return retVal;
             }else

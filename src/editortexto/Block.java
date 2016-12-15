@@ -14,18 +14,24 @@ public class Block {
     private boolean modifying;
     private String text;
     private int user;
+    private boolean modified;
     
     public Block() {
         row=-1;
         modifying=false;
         text="";
+        modified=false;
     }
 
     public Block(int row, boolean modifying, String text,int id) {
         this.row = row;
         this.modifying = modifying;
+        if(modifying)
+            user=id;
+        else
+            user=-1;
         this.text = text;
-        user=id;
+        modified=false;
     }
 
     
@@ -44,6 +50,15 @@ public class Block {
     public void setText(String text) {
         this.text = text;
     }
+
+    public boolean isModified() {
+        return modified;
+    }
+
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+    
 
     public int getRow() {
         return row;
@@ -65,7 +80,7 @@ public class Block {
 
     @Override
     public String toString() {
-        return "Block{" + "row=" + row + ", modifying=" + modifying + ", text=" + text + '}';
+        return "Block{" + "row=" + row + ", modifying=" + modifying + ", text=" + text +", user="+user+", modified="+modified+ '}';
     }
 
     public int getUser() {

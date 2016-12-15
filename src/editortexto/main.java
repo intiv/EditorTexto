@@ -160,6 +160,8 @@ public class main extends javax.swing.JFrame {
         bReduceSize = new javax.swing.JButton();
         bItalic = new javax.swing.JButton();
         bBold = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         bAlignLeft = new javax.swing.JButton();
         bAlignRight = new javax.swing.JButton();
@@ -400,6 +402,20 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Update");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+
+        jButton2.setText("Subir");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -419,21 +435,32 @@ public class main extends javax.swing.JFrame {
                 .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jlTextSize, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bUnderline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bReduceSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jlTextSize)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bST, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bItalic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bUnderline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(bBold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bReduceSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bIncreaseSize, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jlTextSize))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2))))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -741,7 +768,7 @@ public class main extends javax.swing.JFrame {
         });
         jpmAdminFiles.add(jmiExport);
 
-        jmiRefresh.setText("jMenuItem1");
+        jmiRefresh.setText("Actualizar");
         jmiRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiRefreshActionPerformed(evt);
@@ -1598,16 +1625,27 @@ public class main extends javax.swing.JFrame {
         try {
             Connect();
             tpText.setEditable(true);
+            tpText.setText("");
             TextSize = 12;
             jlTextSize.setText(12 + "");
             curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
-            String[] lines = curr.getText().split("\n");
+            ResultSet getBlocks = db.executeQuery("select * from blocks where FileID=" + curr.getID() + " order by row asc");
+            ArrayList<Block> bloques = new ArrayList();
+            String texto=" ";
+            while (getBlocks.next()) {
+                boolean modifying = getBlocks.getInt("Editing") == 1;
+                Block b=new Block(getBlocks.getInt("row"), modifying, getBlocks.getString("Text"), getBlocks.getInt("UserID"));
+                System.out.println(b.toString());
+                bloques.add(b);
+                texto+=b.getText()+"\n";
+            }
+            /*String[] lines = curr.getText() .split("\n");
             ArrayList<Block> bloques = new ArrayList();
             for (int i = 0; i < lines.length; i++) {
                 bloques.add(new Block(i, false, lines[i], -1));
-            }
+            }*/
             curr.setBlocks(bloques);
-            tpText.setText(curr.getBlocksText());
+            tpText.getDocument().insertString(0, texto, tpText.getCharacterAttributes());
             if (jtAdmin.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Tus Archivos")) {
                 tpText.setEditable(true);
                 bBold.setEnabled(true);
@@ -1692,16 +1730,30 @@ public class main extends javax.swing.JFrame {
                 }
             }
 
-        } else if (curr != null && tpText.isEditable()) {
+        } else if (curr != null && tpText.isEditable() && tpText.getDocument().getLength() > 0) {
             int row = RowNum();
+
             if (curr.getBlocks().get(row).isModifying()) {
+                System.out.println("Entro al if");
+                if (OriginalRow != -1 && OriginalRow <= curr.getBlocks().size()&&OriginalRow!=row) {
+                    curr.getBlocks().get(OriginalRow).setModifying(false);
+                }
                 if (curr.getBlocks().get(row).getUser() != principal.getId()) {
+                    System.out.println("principal: "+principal.getId());
+                    System.out.println("block("+row+"): "+curr.getBlocks().get(row).getUser());
                     JOptionPane.showMessageDialog(jdMain, "Bloqueado");
                     tpText.setFocusable(false);
                     tpText.setFocusable(true);
                 } else {
                     OriginalRow = row;
                 }
+            }else{
+                System.out.println("Entro al else");
+                if(OriginalRow!=-1&&OriginalRow<=curr.getBlocks().size())
+                    curr.getBlocks().get(OriginalRow).setModifying(false);
+                OriginalRow=row;
+                curr.getBlocks().get(row).setModifying(true);
+                curr.getBlocks().get(row).setUser(principal.getId());
             }
         }
     }//GEN-LAST:event_tpTextMouseClicked
@@ -2025,6 +2077,9 @@ public class main extends javax.swing.JFrame {
 
     private void tpTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tpTextKeyReleased
         if (tpText.isEditable()) {
+            if (evt.getKeyCode() == KeyEvent.VK_BACKSPACE) {
+                System.out.println("" + RowNum());
+            }
             if ((evt.getKeyCode() > 64 && evt.getKeyCode() < 91) || (evt.getKeyCode() > 96 && evt.getKeyCode() < 123) || evt.getKeyCode() == 8) {
                 try {
                     System.out.println("TECLA");
@@ -2039,9 +2094,11 @@ public class main extends javax.swing.JFrame {
                     System.out.println("--------------------------------");
                     if (row >= curr.getBlocks().size()) {
                         curr.getBlocks().add(new Block(row, true, lineas[row], principal.getId()));
+                        curr.getBlocks().get(row).setModified(true);
                     } else {
                         curr.getBlocks().get(row).setText(lineas[row]);
                         curr.getBlocks().get(row).setModifying(true);
+                        curr.getBlocks().get(row).setModified(true);
                         curr.getBlocks().get(row).setUser(principal.getId());
                     }
                 } catch (BadLocationException ex) {
@@ -2058,7 +2115,7 @@ public class main extends javax.swing.JFrame {
                     curr.getBlocks().add(nuevo);
                     Connect();
                     try {
-                        db.executeUpdate("insert into blocks(UserID,Text,row,FileID) values(" + principal.getId() + ",' '," + row + "," + curr.getID() + ")");
+                        db.executeUpdate("insert into blocks(UserID,Text,row,FileID,Edited,Editing) values(" + principal.getId() + ",' '," + row + "," + curr.getID() + ",0,1)");
                     } catch (SQLException ex) {
                         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -2115,6 +2172,50 @@ public class main extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tpTextKeyReleased
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        Connect();
+        try {
+            ResultSet rs = db.executeQuery("select ID from blocks");
+            rs.last();
+            if (curr.getBlocks().size() <= rs.getRow()) {
+                for (Block block : curr.getBlocks()) {
+                    if (block.isModified()) {
+                        if ((block.isModifying() && block.getUser() == principal.getId())) {
+
+                        }
+                    }
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Close();
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        try {
+            Connect();
+            ResultSet rs=db.executeQuery("select ID from users where user='Hola'");
+            rs.next();
+            System.out.println(rs);
+            for (int i = 0; i < curr.getBlocks().size(); i++) {
+                System.out.println(i + ": " + curr.getBlocks().get(i).toString());
+                int mod=curr.getBlocks().get(i).isModifying()?1:0;
+                int us=-1;
+                if(mod==1)
+                    us=principal.getId();
+                db.executeUpdate("update blocks set Text='"+curr.getBlocks().get(i).getText()+"',Editing="+mod+",UserID="+us+" where FileID="+curr.getID()+" and row="+curr.getBlocks().get(i).getRow());
+            }
+            
+            Close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Close();
+        }
+    }//GEN-LAST:event_jButton2MouseClicked
 
     public void Connect() {
         try {
@@ -2438,6 +2539,8 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton bUnderline;
     private javax.swing.JComboBox<String> cbListUsers;
     private javax.swing.JCheckBox checkOrder;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
