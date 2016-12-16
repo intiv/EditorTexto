@@ -54,6 +54,7 @@ public class FileClass {
         this.name = name;
         this.blocks = blocks;
         this.ID = -1;
+        
     }
 
     @XmlElement
@@ -127,6 +128,13 @@ public class FileClass {
         }
     }
 
+    public void restructure(){
+        boolean valid=false;
+        while(!valid){
+            valid=true;
+        }
+    }
+    
     public void setText(String text) {
         this.text = text;
     }

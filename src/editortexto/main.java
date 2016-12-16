@@ -37,6 +37,7 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -57,6 +58,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.jsoup.Jsoup;
+import java.io.InputStream;
 
 /*
 ********************************************************************************************* 
@@ -102,14 +104,33 @@ public class main extends javax.swing.JFrame {
         OriginalTable = (DefaultTableModel) jtReport.getModel();
         tpText.setText("");
         this.setLocationRelativeTo(null);
-        jlIcon.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/sol.png").getImage().getScaledInstance(200, 180, Image.SCALE_SMOOTH)));
+        jlIcon.setSize(125, 180);
+        OriginalRow = -1;
+        jlIcon.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/sol.png").getImage().getScaledInstance(/*jlIcon.getHeight(), jlIcon.getWidth()*/125, 180, Image.SCALE_SMOOTH)));
+        jlFrameIcon.setIcon(new ImageIcon(new ImageIcon("./src/Iconos/sol.png").getImage().getScaledInstance(jlFrameIcon.getWidth(), jlFrameIcon.getHeight(), Image.SCALE_SMOOTH)));
+
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyectoed2?autoReconnect=true&useSSL=false", "root", "pokemon123");
             db = con.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        try {
+            URL url = new URL("ftp://UsuarioOA%40webbpa.com:Seccion25@ftp.webbpa.com/Prueba.xml");
+            URLConnection conn = url.openConnection();
+            InputStream is = conn.getInputStream();
+            FileOutputStream fos = new FileOutputStream("C:\\Users\\Inti Velasquez\\Desktop\\ftp.xml");
+            byte[] l = new byte[30];
+            int Bytes = -1;
+            while ((Bytes = is.read(l)) != -1) {
+                fos.write(l, 0, Bytes);
+            }
+            fos.flush();
+            fos.close();
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             File asd = new File("./ftptemp");
             if (!asd.exists()) {
@@ -177,7 +198,9 @@ public class main extends javax.swing.JFrame {
         bClose = new javax.swing.JButton();
         bLogout = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jlUser = new javax.swing.JLabel();
         jlIcon = new javax.swing.JLabel();
+        jlCurrFile = new javax.swing.JLabel();
         jmbMain = new javax.swing.JMenuBar();
         jmFile = new javax.swing.JMenu();
         jmiOpenFile = new javax.swing.JMenuItem();
@@ -326,13 +349,13 @@ public class main extends javax.swing.JFrame {
         jdMain.setBackground(new java.awt.Color(51, 51, 255));
         jdMain.setResizable(false);
 
-        jpMain.setBackground(new java.awt.Color(0, 0, 125));
+        jpMain.setBackground(new java.awt.Color(0, 0, 150));
         jpMain.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 153)));
 
         jtpEditorOptions.setBackground(new java.awt.Color(102, 102, 102));
-        jtpEditorOptions.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
+        jtpEditorOptions.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 5, true));
 
-        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
         jlTextSize.setForeground(new java.awt.Color(0, 102, 255));
         jlTextSize.setText("Textsize");
@@ -563,7 +586,7 @@ public class main extends javax.swing.JFrame {
 
         tpText.setEditable(false);
         tpText.setBackground(new java.awt.Color(245, 245, 245));
-        tpText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
+        tpText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 5, true));
         tpText.setContentType("text/html"); // NOI18N
         tpText.setText("<html>\r\n  <head>\r\n\r\n  </head>\r\n  <body>\r\n    <p>\r\n    </p>\r\n  </body>\r\n</html>\r\n"); // NOI18N
         tpText.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -578,9 +601,9 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tpText);
 
-        jtAdmin.setBackground(new java.awt.Color(51, 51, 51));
-        jtAdmin.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 102), 5, true));
-        jtAdmin.setForeground(new java.awt.Color(0, 51, 255));
+        jtAdmin.setBackground(new java.awt.Color(102, 102, 102));
+        jtAdmin.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 5, true));
+        jtAdmin.setForeground(new java.awt.Color(255, 255, 255));
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Archivos");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Tus Archivos");
         treeNode1.add(treeNode2);
@@ -600,7 +623,7 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jtAdmin);
 
-        jPanel7.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel7.setBackground(new java.awt.Color(102, 102, 102));
 
         bClose.setText("Exit");
         bClose.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -645,25 +668,37 @@ public class main extends javax.swing.JFrame {
                 .addGap(43, 43, 43))
         );
 
+        jlUser.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        jlUser.setText("Usuario, ID");
+
+        jlIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/sol.png"))); // NOI18N
+
+        jlCurrFile.setText("Archivo Actual: ");
+
         javax.swing.GroupLayout jpMainLayout = new javax.swing.GroupLayout(jpMain);
         jpMain.setLayout(jpMainLayout);
         jpMainLayout.setHorizontalGroup(
             jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMainLayout.createSequentialGroup()
+            .addGroup(jpMainLayout.createSequentialGroup()
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpMainLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpMainLayout.createSequentialGroup()
                         .addGap(27, 27, 27)
-                        .addComponent(jlIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jlUser, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpMainLayout.createSequentialGroup()
-                        .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 796, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                        .addGap(48, 48, 48)
+                        .addComponent(jlIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpMainLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(22, 22, 22)
+                .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlCurrFile)
+                    .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jpMainLayout.createSequentialGroup()
+                            .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 796, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpMainLayout.setVerticalGroup(
@@ -671,29 +706,42 @@ public class main extends javax.swing.JFrame {
             .addGroup(jpMainLayout.createSequentialGroup()
                 .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpMainLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jtpEditorOptions)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                        .addGap(8, 8, 8)
+                        .addComponent(jlIcon)
+                        .addGap(18, 18, 18)
+                        .addComponent(jlUser, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                        .addGap(25, 25, 25))
                     .addGroup(jpMainLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jlIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtpEditorOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jlCurrFile)
+                        .addGap(7, 7, 7))
+                    .addGroup(jpMainLayout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jmFile.setText("Archivo");
 
         jmiOpenFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         jmiOpenFile.setText("Cargar Archivo");
+        jmiOpenFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiOpenFileActionPerformed(evt);
+            }
+        });
         jmFile.add(jmiOpenFile);
 
         Guardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         Guardar.setText("Guardar");
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
+            }
+        });
         jmFile.add(Guardar);
 
         jmbMain.add(jmFile);
@@ -1368,7 +1416,9 @@ public class main extends javax.swing.JFrame {
                         int id = -1;
                         ResultSet HighestID = db.executeQuery("select ID from files order by ID desc limit 1");
                         if (HighestID.next()) {
+                            System.out.println("hell yeah");
                             id = HighestID.getInt(1);
+                            System.out.println(id);
                         }
                         curr = new FileClass();
                         curr.setName(CurrentFile.getName());
@@ -1376,6 +1426,7 @@ public class main extends javax.swing.JFrame {
                             id += 1;
                         }
                         curr.setID(id);
+                        System.out.println(curr.getID());
                         // curr.setBlocks(blocks);
                         curr.setText(Text);
                     }
@@ -1535,7 +1586,15 @@ public class main extends javax.swing.JFrame {
         try {
             Connect();
             db.executeUpdate("update users set connected=0 where ID=" + principal.getId() + " limit 1");
-
+            db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " ID " + principal.getId() + " salio del sistema')");
+            if (curr != null) {
+                for (Block block : curr.getBlocks()) {
+                    if (block.isModifying() && block.getUser() == principal.getId()) {
+                        db.executeUpdate("update blocks set UserID=-1,Editing=0 where FileID=" + curr.getID());
+                        block.setModifying(false);
+                    }
+                }
+            }
         } catch (SQLException ex) {
             Close();
             System.exit(1);
@@ -1629,15 +1688,24 @@ public class main extends javax.swing.JFrame {
             TextSize = 12;
             jlTextSize.setText(12 + "");
             curr = (FileClass) ((DefaultMutableTreeNode) jtAdmin.getSelectionPath().getLastPathComponent()).getUserObject();
+            jlCurrFile.setText(curr.getName());
             ResultSet getBlocks = db.executeQuery("select * from blocks where FileID=" + curr.getID() + " order by row asc");
             ArrayList<Block> bloques = new ArrayList();
-            String texto=" ";
+            String texto = " ";
+            getBlocks.last();
+            int length = getBlocks.getRow();
+            getBlocks.beforeFirst();
+            int cont = 0;
             while (getBlocks.next()) {
                 boolean modifying = getBlocks.getInt("Editing") == 1;
-                Block b=new Block(getBlocks.getInt("row"), modifying, getBlocks.getString("Text"), getBlocks.getInt("UserID"));
+                Block b = new Block(getBlocks.getInt("row"), modifying, getBlocks.getString("Text"), getBlocks.getInt("UserID"));
                 System.out.println(b.toString());
                 bloques.add(b);
-                texto+=b.getText()+"\n";
+
+                texto += b.getText();
+                if (++cont < length) {
+                    texto += "\n";
+                }
             }
             /*String[] lines = curr.getText() .split("\n");
             ArrayList<Block> bloques = new ArrayList();
@@ -1704,7 +1772,7 @@ public class main extends javax.swing.JFrame {
 
     private void tpTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tpTextMouseClicked
         if (SwingUtilities.isRightMouseButton(evt)) {
-            String text = tpText.getText();
+            /* String text = tpText.getText();
 
             org.jsoup.nodes.Document doc = Jsoup.parse(text);
             for (int i = 0; i < doc.getAllElements().size(); i++) {
@@ -1728,30 +1796,31 @@ public class main extends javax.swing.JFrame {
                 } else if (split[i].equals("    <" + HTML.Tag.P + ">")) {
                     System.out.println("segundo: " + i + ", " + split[i]);
                 }
-            }
+            }*/
 
-        } else if (curr != null && tpText.isEditable() && tpText.getDocument().getLength() > 0) {
+        } else if (curr != null && tpText.isEditable() && tpText.getDocument().getLength() > 0 && curr.getBlocks().size() > 0) {
             int row = RowNum();
 
             if (curr.getBlocks().get(row).isModifying()) {
-                System.out.println("Entro al if");
-                if (OriginalRow != -1 && OriginalRow <= curr.getBlocks().size()&&OriginalRow!=row) {
+                System.out.println("Entro al if, original: " + OriginalRow);
+                if (OriginalRow != -1 && OriginalRow <= curr.getBlocks().size() && OriginalRow != row) {
                     curr.getBlocks().get(OriginalRow).setModifying(false);
                 }
                 if (curr.getBlocks().get(row).getUser() != principal.getId()) {
-                    System.out.println("principal: "+principal.getId());
-                    System.out.println("block("+row+"): "+curr.getBlocks().get(row).getUser());
+                    System.out.println("principal: " + principal.getId());
+                    System.out.println("block(" + row + "): " + curr.getBlocks().get(row).getUser());
                     JOptionPane.showMessageDialog(jdMain, "Bloqueado");
                     tpText.setFocusable(false);
                     tpText.setFocusable(true);
                 } else {
                     OriginalRow = row;
                 }
-            }else{
-                System.out.println("Entro al else");
-                if(OriginalRow!=-1&&OriginalRow<=curr.getBlocks().size())
+            } else {
+                System.out.println("Entro al else, Original: " + OriginalRow);
+                if (OriginalRow != -1 && OriginalRow <= curr.getBlocks().size()) {
                     curr.getBlocks().get(OriginalRow).setModifying(false);
-                OriginalRow=row;
+                }
+                OriginalRow = row;
                 curr.getBlocks().get(row).setModifying(true);
                 curr.getBlocks().get(row).setUser(principal.getId());
             }
@@ -1801,7 +1870,9 @@ public class main extends javax.swing.JFrame {
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
+
                         fos.close();
+                        JOptionPane.showMessageDialog(jdExport, "Archivo exportado con exito!");
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
@@ -1814,7 +1885,7 @@ public class main extends javax.swing.JFrame {
                         FileOutputStream fos = new FileOutputStream(new File(dir.getAbsolutePath() + "\\" + name + ".rtf"));
                         docu.write(fos);
                         fos.close();
-                        JOptionPane.showMessageDialog(jdExport, "Archivo exportado con excito");
+                        JOptionPane.showMessageDialog(jdExport, "Archivo exportado con exito!");
                         try {
                             db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " exportó el archivo " + Chosen.getName() + " ID " + Chosen.getID() + " a RTF')");
                         } catch (SQLException e) {
@@ -1831,11 +1902,14 @@ public class main extends javax.swing.JFrame {
                         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                         m.marshal(Chosen, new File(file.getAbsolutePath() + "\\" + name + ".xml"));
                         m.marshal(asd, new File(file.getAbsolutePath() + "\\" + asd.getName() + ".xml"));
+                        JOptionPane.showMessageDialog(jdExport, "Archivo exportado con exito!");
+
                         try {
                             db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(),'Usuario " + principal.getUsername() + " exportó el archivo " + Chosen.getName() + " ID " + Chosen.getID() + " a XML')");
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(jdExport, "Ocurrio un error escribiendo a la base de datos");
                         }
+
                     } catch (JAXBException e) {
                         JOptionPane.showMessageDialog(jdExport, "Ocurrio un error exportando el documento.\nVerifique el directorio por el archivo");
                     }
@@ -2080,6 +2154,9 @@ public class main extends javax.swing.JFrame {
             if (evt.getKeyCode() == KeyEvent.VK_BACKSPACE) {
                 System.out.println("" + RowNum());
             }
+            if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+                RowNum();
+            }
             if ((evt.getKeyCode() > 64 && evt.getKeyCode() < 91) || (evt.getKeyCode() > 96 && evt.getKeyCode() < 123) || evt.getKeyCode() == 8) {
                 try {
                     System.out.println("TECLA");
@@ -2176,7 +2253,7 @@ public class main extends javax.swing.JFrame {
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         Connect();
         try {
-            ResultSet rs = db.executeQuery("select ID from blocks");
+            ResultSet rs = db.executeQuery("select * from blocks where UserID<>" + principal.getId() + " and Edited=true");
             rs.last();
             if (curr.getBlocks().size() <= rs.getRow()) {
                 for (Block block : curr.getBlocks()) {
@@ -2197,18 +2274,19 @@ public class main extends javax.swing.JFrame {
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         try {
             Connect();
-            ResultSet rs=db.executeQuery("select ID from users where user='Hola'");
-            rs.next();
-            System.out.println(rs);
+            System.out.println("LINEA ACTUAL: " + OriginalRow);
             for (int i = 0; i < curr.getBlocks().size(); i++) {
                 System.out.println(i + ": " + curr.getBlocks().get(i).toString());
-                int mod=curr.getBlocks().get(i).isModifying()?1:0;
-                int us=-1;
-                if(mod==1)
-                    us=principal.getId();
-                db.executeUpdate("update blocks set Text='"+curr.getBlocks().get(i).getText()+"',Editing="+mod+",UserID="+us+" where FileID="+curr.getID()+" and row="+curr.getBlocks().get(i).getRow());
+                int mod = curr.getBlocks().get(i).isModifying() ? 1 : 0;
+                int us = -1;
+                int mod2 = curr.getBlocks().get(i).isModified() ? 1 : 0;
+                if (mod == 1) {
+                    us = principal.getId();
+                }
+
+                db.executeUpdate("update blocks set Text='" + curr.getBlocks().get(i).getText() + "',Editing=" + mod + ",UserID=" + us + ",Edited=" + mod2 + " where FileID=" + curr.getID() + " and row=" + i);
             }
-            
+
             Close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -2216,6 +2294,145 @@ public class main extends javax.swing.JFrame {
             Close();
         }
     }//GEN-LAST:event_jButton2MouseClicked
+
+    private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
+        if (curr != null) {
+            String name = curr.getName();
+            if (name.contains(".")) {
+                name = name.substring(0, name.lastIndexOf("."));
+            }
+            System.out.println(curr.getID());
+            Connect();
+            try {
+                ResultSet rs = db.executeQuery("select ID from files where Name='" + name + "' limit 1");
+                if (rs.next()) {
+                    rs.close();
+                    int op = JOptionPane.showConfirmDialog(jdMain, "Ya existe un archivo con ese nombre.\nCambiar nombre del archivo?", "El archivo ya existe!", JOptionPane.OK_CANCEL_OPTION);
+                    if (op == JOptionPane.OK_OPTION) {
+                        try {
+                            String nName=JOptionPane.showInputDialog(jdMain, "Ingrese nuevo nombre");
+                            curr.setName(nName);
+                            jlCurrFile.setText(nName);
+                            db.executeUpdate("insert into files(Name,XML,OwnerID,Date,Time) values('"+nName+"',' ',"+principal.getId()+",curdate(),curtime())");
+                            //rs=db.executeQuery("select ID from files where Name='"+nName+"' and OwnerID="+principal.getId()+" order by ID asc limit 1");
+                            
+                           // int id=rs.getInt(1);
+                            
+                            for (int i = 0; i < curr.getBlocks().size(); i++) {
+                                int mod=1;
+                                if(curr.getBlocks().get(i).isModifying()&&curr.getBlocks().get(i).getUser()==principal.getId()){
+                                    curr.getBlocks().get(i).setModifying(false);
+                                    mod=0;
+                                }
+                                
+                                db.executeUpdate("update blocks set row="+curr.getBlocks().get(i).getRow()+",Text='"+curr.getBlocks().get(i).getText()+"',FileID="+curr.getID()+",Editing="+mod+",Edited=0");
+                            }
+                        } catch (InputMismatchException e) {
+
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(jdMain, "No se subio el archivo a la BD");
+                    }
+                } else {
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_GuardarActionPerformed
+
+    private void jmiOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiOpenFileActionPerformed
+        try {
+            Connect();
+            JFileChooser chooser = new JFileChooser("Open File");
+            chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt", "xml", "docx", "doc", "rtf"));
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int op = chooser.showOpenDialog(jdMain);
+            if (op == JFileChooser.APPROVE_OPTION) {
+                CurrentFile = chooser.getSelectedFile();
+                if (CurrentFile.getName().endsWith(".doc") || CurrentFile.getName().endsWith(".txt")) {
+                    try (FileReader fr = new FileReader(CurrentFile); BufferedReader br = new BufferedReader(fr)) {
+                        String Text = "";
+                        tpText.setText("");
+                        Document doc = tpText.getDocument();
+                        String line;
+                        ArrayList<Block> bloques = new ArrayList();
+                        int row = 0;
+                        while ((line = br.readLine()) != null) {
+                            doc.insertString(doc.getLength(), line, null);
+                            Text += line + "\n";
+                            row++;
+                        }
+                        int id = -1;
+                        ResultSet HighestID = db.executeQuery("select ID from files order by ID desc limit 1");
+                        if (HighestID.next()) {
+                            id = HighestID.getInt(1);
+                        }
+                        curr = new FileClass();
+                        curr.setName(CurrentFile.getName().substring(0, CurrentFile.getName().lastIndexOf(".")));
+                        if (id != -1) {
+                            id += 1;
+                        }
+                        curr.setID(id);
+                        System.out.println(id);
+                        // curr.setBlocks(blocks);
+                        curr.setText(Text);
+                    }
+                } else if (CurrentFile.getName().endsWith(".xml")) {
+                    FileReader fr = new FileReader(CurrentFile);
+                    BufferedReader br = new BufferedReader(fr);
+                    String line;
+                    String xml = "";
+                    ArrayList<Block> bloques = new ArrayList();
+                    int cont = 0;
+                    while ((line = br.readLine()) != null) {
+                        xml += line;
+                        bloques.add(new Block(cont, false, line, -1));
+                    }
+                    System.out.println("\n" + xml);
+                    FileClass des = new FileClass();
+                    FileClass lel = des.Deserialize(xml);
+                    lel.setBlocks(bloques);
+                    curr = lel;
+                    if (curr.getBlocks().size() > 0) {
+                        tpText.setText(curr.getBlocksText());
+                    } else {
+                        tpText.setText("");
+                    }
+
+                } else if (CurrentFile.getName().endsWith(".docx") || CurrentFile.getName().endsWith(".rtf")) {
+                    try {
+                        FileInputStream fis = new FileInputStream(CurrentFile);
+
+                        XWPFDocument document = new XWPFDocument(fis);
+
+                        List<XWPFParagraph> paragraphs = document.getParagraphs();
+                        String x = "";
+                        ArrayList<Block> bloques = new ArrayList();
+                        int cont = 0;
+                        for (XWPFParagraph para : paragraphs) {
+                            x += para.getText();
+                            cont++;
+                            bloques.add(new Block(cont, false, para.getText(), -1));
+
+                        }
+                        curr = new FileClass(CurrentFile.getName().substring(0, CurrentFile.getName().lastIndexOf(".")), bloques);
+                        System.out.println(curr.toString(1));
+                        tpText.setText(curr.getBlocksText());
+                        fis.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (NullPointerException | IOException | BadLocationException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Close();
+        }
+    }//GEN-LAST:event_jmiOpenFileActionPerformed
 
     public void Connect() {
         try {
@@ -2381,6 +2598,7 @@ public class main extends javax.swing.JFrame {
                     if (usuario.getInt("connected") == 0) {
 
                         principal = new User(usuario.getString("user"), usuario.getString("pass"), usuario.getInt("ID"));
+                        jlUser.setText("<html><b>Usuario: " + principal.getUsername() + ", ID: " + principal.getId() + "</b></html>");
                         usuario.close();
                         db.executeUpdate("insert into log(Date,Time,Action) values(curdate(),curtime(), '" + principal.getUsername() + " con ID " + principal.getId() + " inicio sesión')");
                         db.executeUpdate("update users set connected=1 where ID=" + principal.getId() + " limit 1");
@@ -2567,11 +2785,13 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JDialog jdMain;
     private javax.swing.JDialog jdPermisos;
     private javax.swing.JDialog jdReport;
+    private javax.swing.JLabel jlCurrFile;
     private javax.swing.JLabel jlFrameIcon;
     private javax.swing.JLabel jlIcon;
     private javax.swing.JLabel jlName;
     private javax.swing.JLabel jlTextSize;
     private javax.swing.JLabel jlTitle;
+    private javax.swing.JLabel jlUser;
     private javax.swing.JMenu jmFile;
     private javax.swing.JMenu jmLogout;
     private javax.swing.JMenu jmOptions;
