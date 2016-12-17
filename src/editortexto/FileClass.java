@@ -24,37 +24,29 @@ public class FileClass {
 
     private int ID;
     private String name;
-    //private byte[][] sections;
-    private String text;
     private ArrayList<Block> blocks;
 
     public FileClass() {
         ID = -1;
         name = "";
-        text = "";
-        //sections=null;
     }
 
-    public FileClass(int ID, String name, String text) {
+    public FileClass(int ID, String name) {
         this.ID = ID;
         this.name = name;
-        this.text = text;
-        //this.sections = sections;
     }
 
-    public FileClass(int ID, String name,/* String text, */ ArrayList<Block> blocks) {
+    public FileClass(int ID, String name,ArrayList<Block> blocks) {
         this.ID = ID;
         this.name = name;
-        //this.text = text;
         this.blocks = blocks;
-        //this.sections = sections;
     }
 
     public FileClass(String name, ArrayList<Block> blocks) {
         this.name = name;
         this.blocks = blocks;
         this.ID = -1;
-        
+
     }
 
     @XmlElement
@@ -71,17 +63,26 @@ public class FileClass {
         return name;
     }
 
+    public Block get(int i) {
+        if (blocks != null) {
+            if (i >= 0 && i < blocks.size()) {
+                return blocks.get(i);
+            }
+        }
+        return null;
+    }
+
+    public int size() {
+        return blocks.size();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     @Override
     public String toString() {
-        return "FileClass{" + "ID=" + ID + ", name=" + name + ", sections="/* + Arrays.deepToString(sections) */ + '}';
-    }
-
-    public String toString(int x) {
-        return "FileClass{ ID=" + ID + ", name = " + name + ", Blocks: \n" + blocks.toString() + "}";
+        return "ID=" + ID + "\nname = " + name;
     }
 
     public String Serialize() {
@@ -103,14 +104,8 @@ public class FileClass {
             Unmarshaller um = context.createUnmarshaller();
             return (FileClass) um.unmarshal(new StringReader(xml));
         } catch (JAXBException CantDeserialize) {
-            System.out.println("Error deserializando");
             return null;
         }
-    }
-
-    @XmlElement
-    public String getText() {
-        return text;
     }
 
     public String getBlocksText() {
@@ -118,25 +113,25 @@ public class FileClass {
             if (blocks.size() > 0) {
                 String retVal = " ";
                 for (int i = 0; i < blocks.size(); i++) {
-                    retVal+=blocks.get(i).getText()+"\n";
+                    retVal += blocks.get(i).getText();
+                    if (i < blocks.size() - 1) {
+                        retVal += "\n";
+                    }
                 }
                 return retVal;
-            }else
+            } else {
                 return "";
+            }
         } else {
             return "";
         }
     }
 
-    public void restructure(){
-        boolean valid=false;
-        while(!valid){
-            valid=true;
+    public void restructure() {
+        boolean valid = false;
+        while (!valid) {
+            valid = true;
         }
-    }
-    
-    public void setText(String text) {
-        this.text = text;
     }
 
     @XmlElement

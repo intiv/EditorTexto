@@ -80,12 +80,13 @@ public class Block {
 
     @Override
     public String toString() {
-        return "Block{" + "row=" + row + ", modifying=" + modifying + ", text=" + text +", user="+user+", modified="+modified+ '}';
+        return "Block: " + "row=" + row + ", modifying=" + modifying + ", text=" + text +", user="+user+", modified="+modified;
     }
 
     public int getUser() {
         return user;
     }
+
 
     public void setUser(int user) {
         this.user = user;
