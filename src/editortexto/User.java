@@ -2,8 +2,6 @@ package editortexto;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -69,7 +67,6 @@ public class User {
             m.marshal(this, writer);
             return writer.toString();
         } catch (JAXBException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             return "No se pudo serializar";
         }
     }
@@ -81,7 +78,6 @@ public class User {
             Unmarshaller m = context.createUnmarshaller();
             return (User) m.unmarshal(new StringReader(Serial));
         } catch (JAXBException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }

@@ -82,7 +82,7 @@ public class FileClass {
 
     @Override
     public String toString() {
-        return "ID=" + ID + "\nname = " + name;
+        return "ID=" + ID + " - Name = " + name;
     }
 
     public String Serialize() {

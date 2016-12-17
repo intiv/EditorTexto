@@ -1,7 +1,5 @@
 package editortexto;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import java.sql.Connection;
@@ -10,8 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 public class UpdateText extends Thread {
 
@@ -233,7 +229,7 @@ public class UpdateText extends Thread {
                         }
                     }
                     
-                    Thread.sleep(10000);    
+                    Thread.sleep(5000);    
                 }
             //}
                 

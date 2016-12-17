@@ -47,8 +47,6 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -2154,6 +2152,7 @@ public class main extends javax.swing.JFrame {
     private void jmiOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiOpenFileActionPerformed
         try {
             Connect();
+            
             JFileChooser chooser = new JFileChooser("Open File");
             chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt", "xml", "docx", "doc", "rtf"));
             chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -2273,7 +2272,7 @@ public class main extends javax.swing.JFrame {
                     }
                 }         
             }
-                                    updt.interrupt();
+            updt.interrupt();
 
             Close();
         }
